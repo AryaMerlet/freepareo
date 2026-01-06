@@ -12,7 +12,13 @@ export const AuthContext = ({ children }) => {
 			try {
 				const { data, error } = await supabase.auth.getSession();
 				if (error) throw error;
-				setUser(data.session.user);
+				const { data: userData, userError } = await supabase
+					.from("users")
+					.select("*")
+					.eq("id", data.session.user.id)
+					.single();
+				if (userError) throw userError;
+				setUser(userData);
 			} catch (err) {
 				setUser(null);
 				console.log("No active session:", err.message);
@@ -31,7 +37,13 @@ export const AuthContext = ({ children }) => {
 		if (error) {
 			console.error("Error signing in:", error);
 		} else {
-			setUser(data.user);
+			const { data: userData, userError } = await supabase
+				.from("users")
+				.select("*")
+				.eq("id", data.session.user.id)
+				.single();
+			if (userError) throw userError;
+			setUser(userData);
 		}
 	}
 
@@ -43,10 +55,17 @@ export const AuthContext = ({ children }) => {
 		setUser(null);
 	}
 
-	async function signUpNewUser(email, password) {
+	async function signUpNewUser(email, password, nom, prenom, role) {
 		const { data, error } = await supabase.auth.signUp({
 			email: email,
 			password: password,
+			options: {
+				data: {
+					nom: nom,
+					prenom: prenom,
+					role: role,
+				},
+			},
 		});
 		if (error) {
 			console.error("Error signing up:", error);

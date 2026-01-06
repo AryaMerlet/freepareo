@@ -4,6 +4,7 @@ import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
+import Ressources from "./pages/ressources.jsx";
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 				<Route path="/logout" element={<Logout />} />
 				<Route path="/" element={<MainLayout />} />
 				<Route path="/signup" element={<SignupPage />} />
+				<Route path="/ressources" element={<Ressources />} />
 			</Route>
 		</Routes>
 	);
