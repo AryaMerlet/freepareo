@@ -14,11 +14,11 @@ function App() {
 		<Routes>
 			{/* === Pages publiques === */}
 			<Route path="/login" element={<LoginPage />} />
-			<Route path="/signup" element={<SignupPage />} />
 
 			{/* === Pages protégées === */}
 			<Route element={<ProtectedRoute />}>
 				{/* <Route element={<MainLayout />}> */}
+				<Route path="/signup" element={<SignupPage />} />
 				{/* </Route> */}
 			</Route>
 		</Routes>
