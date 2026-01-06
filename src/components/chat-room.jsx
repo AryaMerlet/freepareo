@@ -1,8 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
-import { Send } from "lucide-react"
 import { ChatMessages } from "./chat-messages"
 import supabase from '@/utils/supabase'
 import { ChatInput } from './chat-input'
