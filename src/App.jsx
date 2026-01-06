@@ -1,15 +1,7 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import LoginPage from "./pages/login";
-import SignupPage from "./pages/signup";
-import { Routes, Route } from "react-router";
-import ProtectedRoute from "./pages/protectedRoute";
+import { Routes, Route } from "react-router-dom";
+import { MainLayout } from "./components/MainLayout.jsx";
 
 function App() {
-	const [count, setCount] = useState(0);
-
 	return (
 		<Routes>
 			{/* === Pages publiques === */}
@@ -17,9 +9,8 @@ function App() {
 
 			{/* === Pages protégées === */}
 			<Route element={<ProtectedRoute />}>
-				{/* <Route element={<MainLayout />}> */}
+				<Route path="/" element={<MainLayout />} />
 				<Route path="/signup" element={<SignupPage />} />
-				{/* </Route> */}
 			</Route>
 		</Routes>
 	);
