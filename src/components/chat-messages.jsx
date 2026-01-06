@@ -28,6 +28,14 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
         setEditValue('')
     }
 
+    const renderName = (message) => {
+        if (message.user) {
+            return message.user.prenom + ' ' + message.user.nom
+        } else {
+            return message.id_user?.substring(0, 2) || 'Anon'
+        }
+    }
+
     return (
         <div className="flex flex-col gap-4 p-4 pb-20">
             {messages.map((message) => {
@@ -36,12 +44,12 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
                     <div key={message.id} className="flex items-start gap-3 max-w-full group">
                         <Avatar className="h-8 w-8 shrink-0 mt-1 border">
                             <AvatarFallback className="text-[10px] bg-primary/10 text-primary font-bold uppercase">
-                                {message.user?.prenom?.substring(0, 1) + message.user?.nom?.substring(0, 1) || '??'}
+                                {message.user?.prenom?.substring(0, 1) + message.user?.nom?.substring(0, 1) || message.id_user?.substring(0, 2) || '??'}
                             </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                             <div className="text-[11px] font-semibold text-muted-foreground/80 flex items-center gap-2 ml-1">
-                                <span>{message.user?.prenom + ' ' + message.user?.nom || 'Anon'}</span>
+                                <span>{renderName(message)}</span>
                                 {message.created_at && (
                                     <span className="font-normal text-[10px] opacity-60">
                                         {new Date(message.created_at).toLocaleTimeString('fr-FR', {
