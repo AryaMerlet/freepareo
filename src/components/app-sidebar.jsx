@@ -15,6 +15,7 @@ import {
   IconSearch,
   IconSettings,
   IconUsers,
+  IconMessage,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/components/nav-documents";
@@ -30,6 +31,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { NavMessages } from "./nav-messages";
 
 const data = {
   user: {
@@ -47,12 +49,13 @@ const data = {
       title: "Ressource documentation",
       url: "/ressource-documentation",
       icon: IconListDetails,
-    },
+    }
+  ],
+  navMessage: [
     {
       title: "Message",
-      url: "/chat",
-      icon: IconChartBar,
-    },
+      icon: IconMessage,
+    }
   ],
   navSecondary: [
     {
@@ -95,6 +98,7 @@ export function AppSidebar({ ...props }) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
+        <NavMessages items={data.navMessage} />
         <NavDocuments items={data.Admin} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
