@@ -6,22 +6,26 @@ import { Send } from "lucide-react"
 import { ChatMessages } from "./chat-messages"
 import supabase from '@/utils/supabase'
 import { ChatInput } from './chat-input'
+import { useAuth } from '@/context/authContext'
 
 export const ChatRoom = () => {
     const [messages, setMessages] = useState([]);
     const [writingMessage, setWritingMessage] = useState('');
     const scrollRef = useRef(null);
+    const { user } = useAuth();
 
     useEffect(() => {
         const getMessages = async () => {
             const { data, error } = await supabase
                 .from('message')
-                .select('*')
-                .order('created_at', { ascending: true });
+                .select('*, user(*)')
+                .order('created_at', { ascending: true })
 
             if (error) {
                 console.log(error);
             }
+            console.log(data);
+
             setMessages(data || []);
         }
 
@@ -38,6 +42,21 @@ export const ChatRoom = () => {
                 },
                 (payload) => {
                     setMessages((currentMessages) => [...currentMessages, payload.new])
+                }
+            )
+            .on(
+                'postgres_changes',
+                {
+                    event: 'UPDATE',
+                    schema: 'public',
+                    table: 'message',
+                },
+                (payload) => {
+                    setMessages((currentMessages) =>
+                        currentMessages.map((msg) =>
+                            msg.id === payload.new.id ? payload.new : msg
+                        )
+                    )
                 }
             )
             .subscribe()
@@ -62,7 +81,19 @@ export const ChatRoom = () => {
         return () => clearTimeout(timeoutId);
     }, [messages]);
 
+    const updateMessage = async (id, newContent) => {
+        const { error } = await supabase
+            .from('message')
+            .update({ contenu: newContent })
+            .eq('id', id);
+
+        if (error) {
+            console.log(error);
+        }
+    }
+
     const sendMessage = async (e) => {
+
         e.preventDefault();
         if ((!writingMessage.trim())) return;
 
@@ -70,6 +101,7 @@ export const ChatRoom = () => {
             .from('message')
             .insert({
                 contenu: writingMessage,
+                id_user: user.id,
             });
 
         if (error) {
@@ -82,7 +114,7 @@ export const ChatRoom = () => {
     return (
         <div className="relative flex flex-col h-full bg-white overflow-hidden">
             <ScrollArea className="flex-1 p-0 min-h-0" viewportRef={scrollRef}>
-                <ChatMessages messages={messages} />
+                <ChatMessages messages={messages} onUpdateMessage={updateMessage} />
             </ScrollArea>
 
             <div className="absolute bottom-0 left-0 right-0 p-4">
