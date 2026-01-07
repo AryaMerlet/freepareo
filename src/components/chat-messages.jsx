@@ -10,9 +10,17 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
     const [editValue, setEditValue] = useState('')
     const { user } = useAuth()
 
+    const getLastMessage = (msg) => {
+        if (msg.versions && msg.versions.length > 0) {
+            return getLastMessage(msg.versions[msg.versions.length - 1]);
+        }
+        return msg;
+    }
+
     const handleStartEdit = (message) => {
+        const latest = getLastMessage(message)
         setEditingId(message.id)
-        setEditValue(message.contenu)
+        setEditValue(latest.contenu)
     }
 
     const handleCancelEdit = () => {
@@ -21,7 +29,12 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
     }
 
     const handleSaveEdit = (id) => {
-        if (editValue.trim() && editValue !== messages.find(m => m.id === id)?.contenu) {
+        // Find the message in the props to compare against latest content
+        const rootMessage = messages.find(m => m.id === id);
+        if (!rootMessage) return;
+        const currentContent = getLastMessage(rootMessage).contenu;
+
+        if (editValue.trim() && editValue !== currentContent) {
             onUpdateMessage(id, editValue)
         }
         setEditingId(null)
@@ -39,6 +52,9 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
     return (
         <div className="flex flex-col gap-4 p-4 pb-20">
             {messages.map((message) => {
+                const displayMessage = getLastMessage(message);
+                const isEdited = displayMessage.id !== message.id || message.updated;
+
                 const isEditing = editingId === message.id
                 return (
                     <div key={message.id} className="flex items-start gap-3 max-w-full group">
@@ -50,7 +66,7 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
                         <div className="flex flex-col gap-1.5 flex-1 min-w-0">
                             <div className="text-[11px] font-semibold text-muted-foreground/80 flex items-center gap-2 ml-1">
                                 <span>{renderName(message)}</span>
-                                {message.created_at && (
+                                {message.created_at && (<>
                                     <span className="font-normal text-[10px] opacity-60">
                                         {new Date(message.created_at).toLocaleTimeString('fr-FR', {
                                             hour: '2-digit',
@@ -58,6 +74,16 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
                                             hour12: false
                                         })}
                                     </span>
+                                    {isEdited && message.updated_at && (
+                                        <span className="font-normal text-[10px] opacity-60">
+                                            {"Edited : " + new Date(message.updated_at).toLocaleTimeString('fr-FR', {
+                                                hour: '2-digit',
+                                                minute: '2-digit',
+                                                hour12: false
+                                            })}
+                                        </span>
+                                    )}
+                                </>
                                 )}
                             </div>
                             <div className="flex items-center gap-2 group/bubble max-w-full">
@@ -98,7 +124,7 @@ export const ChatMessages = ({ messages, onUpdateMessage }) => {
                                             className="bg-white border rounded-2xl rounded-tl-none px-4 py-2.5 text-sm shadow-sm text-slate-700 leading-relaxed self-start max-w-[95%] wrap-anywhere"
                                             onClick={message.id_user === user.id ? () => handleStartEdit(message) : null}
                                         >
-                                            {message.contenu}
+                                            {displayMessage.contenu}
                                         </div>
                                         <Button
                                             variant="ghost"

@@ -19,14 +19,29 @@ export const ChatRoom = () => {
                 .order('created_at', { ascending: true })
 
             if (error) {
-                console.log(error);
+                console.error(error);
             }
-            console.log(data);
 
-            setMessages(data || []);
+            const msgMap = {};
+            // First pass: Initialize versions array for all messages
+            data?.forEach(m => {
+                m.versions = [];
+                msgMap[m.id] = m;
+            });
+
+            const roots = [];
+            data?.forEach(m => {
+                if (m.original && msgMap[m.original]) {
+                    msgMap[m.original].versions.push(m);
+                } else {
+                    roots.push(m);
+                }
+            });
+
+            setMessages(roots);
         }
 
-        getMessages();
+        getMessages()
 
         const channel = supabase
             .channel('schema-db-changes')
@@ -38,7 +53,40 @@ export const ChatRoom = () => {
                     table: 'message',
                 },
                 (payload) => {
-                    setMessages((currentMessages) => [...currentMessages, payload.new])
+                    setMessages((currentMessages) => {
+                        const newMessage = { ...payload.new };
+                        // Supplement user info if it's the current user
+                        if (newMessage.id_user === user.id) {
+                            newMessage.user = user.profile;
+                        }
+                        //TODO : Add a service for getting a user profile when it's not the current user
+                        newMessage.versions = [];
+
+                        if (newMessage.original) {
+                            // Helper to recursively find and update parent
+                            const addToParent = (nodes) => {
+                                return nodes.map(node => {
+                                    if (node.id === newMessage.original) {
+                                        return {
+                                            ...node,
+                                            versions: [...(node.versions || []), newMessage]
+                                        };
+                                    }
+                                    if (node.versions && node.versions.length > 0) {
+                                        return {
+                                            ...node,
+                                            versions: addToParent(node.versions)
+                                        };
+                                    }
+                                    return node;
+                                });
+                            };
+                            return addToParent(currentMessages);
+                        }
+
+                        // Normal message, append to bottom
+                        return [...currentMessages, newMessage];
+                    })
                 }
             )
             .on(
@@ -49,11 +97,23 @@ export const ChatRoom = () => {
                     table: 'message',
                 },
                 (payload) => {
-                    setMessages((currentMessages) =>
-                        currentMessages.map((msg) =>
-                            msg.id === payload.new.id ? payload.new : msg
-                        )
-                    )
+                    setMessages((currentMessages) => {
+                        const updateNode = (nodes) => {
+                            return nodes.map(node => {
+                                if (node.id === payload.new.id) {
+                                    return { ...node, ...payload.new };
+                                }
+                                if (node.versions && node.versions.length > 0) {
+                                    return {
+                                        ...node,
+                                        versions: updateNode(node.versions)
+                                    };
+                                }
+                                return node;
+                            });
+                        };
+                        return updateNode(currentMessages);
+                    })
                 }
             )
             .subscribe()
@@ -78,14 +138,46 @@ export const ChatRoom = () => {
         return () => clearTimeout(timeoutId);
     }, [messages]);
 
-    const updateMessage = async (id, newContent) => {
+    const updateMessage = async (rootId, newContent) => {
+
+        // Helper to find message and ensure it exists
+        const findMessage = (nodes, id) => {
+            for (const node of nodes) {
+                if (node.id === id) return node;
+                if (node.versions?.length) {
+                    const found = findMessage(node.versions, id);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
+
+        const rootMsg = findMessage(messages, rootId);
+        if (!rootMsg) return;
+
+        const { data: newMsgData, error: newMsgError } = await supabase
+            .from('message')
+            .insert({
+                created_at: rootMsg.created_at, // Maintain original timestamp logic
+                contenu: newContent,
+                id_user: user.id,
+                original: rootId,
+            })
+            .select()
+            .single()
+
+        if (newMsgError) {
+            console.error(newMsgError);
+            return;
+        }
+
         const { error } = await supabase
             .from('message')
-            .update({ contenu: newContent })
-            .eq('id', id);
+            .update({ updated: newMsgData.id, updated_at: new Date().toISOString() })
+            .eq('id', rootId);
 
         if (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -102,7 +194,7 @@ export const ChatRoom = () => {
             });
 
         if (error) {
-            console.log(error);
+            console.error(error);
         }
 
         setWritingMessage('');
