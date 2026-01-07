@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import supabase from "./../utils/supabase";
-import { getUserProfile } from "@/service/userService";
+import { getUserProfile } from "@/services/userService";
 
 const Auth = createContext();
 
