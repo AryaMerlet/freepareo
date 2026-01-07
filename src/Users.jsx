@@ -8,6 +8,8 @@ export default function Crud() {
   const [prenom, setPrenom] = useState("");
   const [role, setRole] = useState("user");
   const [editingUser, setEditingUser] = useState(null);
+  const [idGroup, setIdGroup] = useState("");
+  const [groups, setGroups] = useState([]);
 
   async function fetchUsers() {
     const { data, error } = await supabase
@@ -19,21 +21,34 @@ export default function Crud() {
     else console.error(error);
   }
 
+  async function fetchGroups() {
+    const { data, error } = await supabase
+      .from("group")
+      .select("id, nom");
+
+      console.log("GROUPS DATA :", data);
+      console.log("GROUPS ERROR :", error);
+
+    if (!error) setGroups(data);
+  }
+
   useEffect(() => {
     fetchUsers();
+    fetchGroups();
   }, []);
 
   async function createUser(e) {
     e.preventDefault();
     const { error } = await supabase
       .from("user")
-      .insert([{ email, nom, prenom, role }]);
+      .insert([{ email, nom, prenom, role, id_group: idGroup }]);
 
     if (!error) {
       setEmail("");
       setNom("");
       setPrenom("");
       setRole("user");
+      setIdGroup("");
       fetchUsers();
     } else {
       console.error(error);
@@ -116,6 +131,19 @@ export default function Crud() {
           <option value="user">User</option>
           <option value="admin">Admin</option>
           <option value="prof">Prof</option>
+        </select>
+
+        <select
+          value={idGroup}
+          onChange={(e) => setIdGroup(e.target.value)}
+          required
+        >
+          <option value="">-- Choisir un groupe --</option>
+          {groups.map((group) => (
+            <option key={group.id} value={group.id}>
+              {group.nom}
+            </option>
+          ))}
         </select>
 
         <button type="submit" style={actionBtn}>
