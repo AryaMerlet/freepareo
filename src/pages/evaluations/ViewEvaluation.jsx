@@ -66,7 +66,7 @@ export default function ViewEvaluation() {
         Retour
       </Button>
 
-      {/* infos d eval */}
+      {/* infos de l'évaluation */}
       <h1 className="text-2xl font-bold">{evaluation.nom}</h1>
       {cours && (
         <p className="text-sm text-muted-foreground">Cours : {cours.nom}</p>
