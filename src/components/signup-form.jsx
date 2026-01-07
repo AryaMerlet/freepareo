@@ -27,8 +27,6 @@ import { useAuth } from "../context/authContext";
 export function SignupForm({ ...props }) {
 	const [role, setRole] = useState("");
 	const [email, setemail] = useState("");
-	const [password, setPassword] = useState("");
-	const [confirmPassword, setConfirmPassword] = useState("");
 	const [nom, setNom] = useState("");
 	const [prenom, setPrenom] = useState("");
 	const { signUpNewUser } = useAuth();
@@ -36,17 +34,17 @@ export function SignupForm({ ...props }) {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		const formData = new FormData(e.target);
-		if (formData.get("password") !== formData.get("confirm-password")) {
-			alert("Passwords do not match");
-			return;
+		try {
+			await signUpNewUser(
+				formData.get("email"),
+				formData.get("nom"),
+				formData.get("prenom"),
+				role
+			);
+			alert("User invited successfully! They will receive an email to set their password.");
+		} catch (error) {
+			alert("Error inviting user: " + error.message);
 		}
-		await signUpNewUser(
-			formData.get("email"),
-			formData.get("password"),
-			formData.get("nom"),
-			formData.get("prenom"),
-			role
-		);
 	};
 
 	return (
@@ -64,6 +62,7 @@ export function SignupForm({ ...props }) {
 							<FieldLabel htmlFor="prenom">Prénom</FieldLabel>
 							<Input
 								id="prenom"
+								name="prenom"
 								value={prenom}
 								onChange={(e) => setPrenom(e.target.value)}
 								type="text"
@@ -75,6 +74,7 @@ export function SignupForm({ ...props }) {
 							<FieldLabel htmlFor="nom">NOM</FieldLabel>
 							<Input
 								id="nom"
+								name="nom"
 								value={nom}
 								onChange={(e) => setNom(e.target.value)}
 								type="text"
@@ -86,6 +86,7 @@ export function SignupForm({ ...props }) {
 							<FieldLabel htmlFor="email">Email</FieldLabel>
 							<Input
 								id="email"
+								name="email"
 								type="email"
 								value={email}
 								onChange={(e) => setemail(e.target.value)}
@@ -98,6 +99,7 @@ export function SignupForm({ ...props }) {
 							</FieldDescription>
 						</Field>
 						<Field>
+							<FieldLabel htmlFor="role">Role</FieldLabel>
 							<Select value={role} onValueChange={(value) => setRole(value)}>
 								<SelectTrigger>
 									<SelectValue placeholder="Select role" />
@@ -108,36 +110,13 @@ export function SignupForm({ ...props }) {
 									<SelectItem value={Role.ELEVE}>Elève</SelectItem>
 								</SelectContent>
 							</Select>
-						</Field>
-						<Field>
-							<FieldLabel htmlFor="password">Password</FieldLabel>
-							<Input
-								id="password"
-								value={password}
-								onChange={(e) => setPassword(e.target.value)}
-								type="password"
-								required
-							/>
 							<FieldDescription>
-								Must be at least 8 characters long.
+								User will receive an email to set their password.
 							</FieldDescription>
-						</Field>
-						<Field>
-							<FieldLabel htmlFor="confirm-password">
-								Confirm Password
-							</FieldLabel>
-							<Input
-								id="confirm-password"
-								value={confirmPassword}
-								onChange={(e) => setConfirmPassword(e.target.value)}
-								type="password"
-								required
-							/>
-							<FieldDescription>Please confirm your password.</FieldDescription>
 						</Field>
 						<FieldGroup>
 							<Field>
-								<Button type="submit">Create Account</Button>
+								<Button type="submit">Invite User</Button>
 								{/* <Button variant="outline" type="button">
 									Sign up with Google
 								</Button>

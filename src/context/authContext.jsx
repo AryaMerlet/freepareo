@@ -49,21 +49,21 @@ export const AuthContext = ({ children }) => {
 		setUser(null);
 	}
 
-	async function signUpNewUser(email, password, nom, prenom, role) {
-		const { data, error } = await supabase.auth.signUp({
-			email: email,
-			password: password,
-			options: {
-				data: {
-					nom: nom,
-					prenom: prenom,
-					role: role,
-				},
+	async function signUpNewUser(email, nom, prenom, role) {
+		const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
+			data: {
+				nom: nom,
+				prenom: prenom,
+				role: role,
 			},
+			redirectTo: `${window.location.origin}/set-password`,
 		});
 		if (error) {
-			console.error("Error signing up:", error);
+			console.error("Error inviting user:", error);
+			throw error;
 		}
+
+		return data;
 	}
 
 	return (

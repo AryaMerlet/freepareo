@@ -3,6 +3,7 @@ import { MainLayout } from "./components/MainLayout.jsx";
 import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
+import SetPasswordPage from "./pages/set-password.jsx";
 import Logout from "./pages/logout.jsx";
 import Ressources from "./pages/ressources.jsx";
 import AdminRoute from "./pages/adminRoute.jsx";
@@ -13,6 +14,7 @@ function App() {
 		<Routes>
 			{/* === Pages publiques === */}
 			<Route path="/login" element={<LoginPage />} />
+			<Route path="/set-password" element={<SetPasswordPage />} />
 
 			{/* === Pages protégées === */}
 			<Route element={<ProtectedRoute />}>

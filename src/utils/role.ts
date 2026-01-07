@@ -5,9 +5,9 @@ export enum Role {
 }
 export const roleHierarchy: Role[] = [Role.ELEVE, Role.PROF, Role.ADMIN];
 
-export function isAdmin(role: Role): boolean {
-	return role === Role.ADMIN;
+export function isAdmin(user: any): boolean {
+	return user?.profile?.role === Role.ADMIN;
 }
-export function isProf(role: Role): boolean {
-	return role === Role.PROF;
+export function isProf(user: any): boolean {
+	return user?.profile?.role === Role.PROF;
 }
