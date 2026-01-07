@@ -6,7 +6,7 @@ import CsvViewer from "../../components/CsvViewer";
 import supabase from "../../utils/supabase";
 
 export default function ViewEvaluation() {
-  const { id } = useParams();
+  const { id } = useParams(); // id de l'éval depuis l'URL
   const navigate = useNavigate();
 
   const [evaluation, setEvaluation] = useState(null);
@@ -18,6 +18,7 @@ export default function ViewEvaluation() {
     const loadEvaluation = async () => {
       setLoading(true);
 
+      // recuperation de l'infos
       const { data: evalData, error: evalError } = await supabase
         .from("evaluation")
         .select("id, nom, id_cours, maximum, contenu")
@@ -32,15 +33,12 @@ export default function ViewEvaluation() {
 
       setEvaluation(evalData);
 
-      if (typeof evalData.contenu === "string") {
-        setFileType("md");
-      } else if (Array.isArray(evalData.contenu)) {
-        setFileType("csv");
-      } else {
-        setFileType(null);
-        console.warn("Contenu non reconnu :", evalData.contenu);
-      }
+      // déterminer le type de contenu
+      if (typeof evalData.contenu === "string") setFileType("md");
+      else if (Array.isArray(evalData.contenu)) setFileType("csv");
+      else setFileType(null);
 
+      // affichage de nom de cours
       if (evalData.id_cours) {
         const { data: coursData } = await supabase
           .from("cours")
@@ -66,27 +64,25 @@ export default function ViewEvaluation() {
         Retour
       </Button>
 
-      {/* infos de l'évaluation */}
+      {/* infos d eval */}
       <h1 className="text-2xl font-bold">{evaluation.nom}</h1>
       {cours && (
         <p className="text-sm text-muted-foreground">Cours : {cours.nom}</p>
       )}
       <p className="text-sm">Score maximum : {evaluation.maximum}</p>
 
-      {/* contenu */}
-      <div className="border p-4 max-h-[70vh] overflow-auto">
-        {fileType === "md" && <MarkdownViewer markdown={evaluation.contenu} />}
+      {/* contenu  */}
+      {fileType === "md" && <MarkdownViewer markdown={evaluation.contenu} />}
 
-        {fileType === "csv" && Array.isArray(evaluation.contenu) && (
-          <CsvViewer rows={evaluation.contenu} />
-        )}
+      {fileType === "csv" && Array.isArray(evaluation.contenu) && (
+        <CsvViewer rows={evaluation.contenu} />
+      )}
 
-        {!fileType && (
-          <p className="text-sm text-muted-foreground">
-            Contenu non reconnu ou vide
-          </p>
-        )}
-      </div>
+      {!fileType && (
+        <p className="text-sm text-muted-foreground">
+          Contenu non reconnu ou vide
+        </p>
+      )}
     </div>
   );
 }

@@ -1,26 +1,32 @@
 export default function CsvViewer({ rows }) {
-  if (!rows?.length) return null;
+  // pas de données
+  if (!Array.isArray(rows) || rows.length === 0) return null;
 
   const headers = Object.keys(rows[0]);
 
   return (
-    <div className="overflow-x-auto border rounded p-2 max-h-64">
-      <table className="min-w-full text-sm border-collapse">
+    <div className="overflow-x-auto">
+      {/* table csv */}
+      <table className="w-full border-collapse text-sm">
         <thead>
-          <tr>
+          <tr className="border-b">
             {headers.map((h) => (
-              <th key={h} className="border px-2 py-1 bg-muted text-left">
+              <th
+                key={h}
+                className="px-3 py-2 text-left font-semibold text-muted-foreground"
+              >
                 {h}
               </th>
             ))}
           </tr>
         </thead>
+
         <tbody>
           {rows.map((row, i) => (
-            <tr key={i}>
+            <tr key={i} className="border-b last:border-b-0 hover:bg-muted/40">
               {headers.map((h) => (
-                <td key={h} className="border px-2 py-1 whitespace-nowrap">
-                  {row[h]}
+                <td key={h} className="px-3 py-2 align-top">
+                  {row[h] ?? ""}
                 </td>
               ))}
             </tr>
