@@ -13,7 +13,7 @@ export const AuthContext = ({ children }) => {
 			try {
 				const { data, error } = await supabase.auth.getSession();
 				const userProfile = {
-					...data.session.user, profile: getUserProfile(data.session.user.id)
+					...data.session.user, profile: await getUserProfile(data.session.user.id)
 				};
 
 				if (error) throw error;
