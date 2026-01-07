@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import supabase from "./utils/supabase";
+import supabase from "../utils/supabase";
 
-export default function Crud() {
+export default function Users() {
   const [users, setUsers] = useState([]);
   const [email, setEmail] = useState("");
   const [nom, setNom] = useState("");
@@ -25,10 +25,6 @@ export default function Crud() {
     const { data, error } = await supabase
       .from("group")
       .select("id, nom");
-
-      console.log("GROUPS DATA :", data);
-      console.log("GROUPS ERROR :", error);
-
     if (!error) setGroups(data);
   }
 

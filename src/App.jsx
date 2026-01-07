@@ -5,6 +5,7 @@ import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
 import Cours from "./pages/crudCours.jsx";
+import Users from "./pages/crudUsers.jsx";
 
 function App() {
 	return (
@@ -16,6 +17,7 @@ function App() {
 			<Route element={<ProtectedRoute />}>
 				<Route path="/logout" element={<Logout />} />
 				<Route path="/" element={<MainLayout />}>
+					<Route path="users" element={<Users />} />
 					<Route path="cours" element={<Cours />} />
 				</Route>
 				<Route path="/signup" element={<SignupPage />} />
