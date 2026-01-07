@@ -1,3 +1,5 @@
+import supabase from "@/utils/supabase";
+
 export const getUserProfile = async (userId) => {
     const { data, error } = await supabase
         .from('user')
