@@ -6,6 +6,7 @@ import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
 import Ressources from "./pages/ressources.jsx";
 import AdminRoute from "./pages/adminRoute.jsx";
+import Cours from "./components/cours.jsx";
 
 function App() {
 	return (
@@ -20,8 +21,10 @@ function App() {
 					{/* Ajoutez ici les routes accessibles uniquement par les admins */}
 				</Route>
 				<Route path="/logout" element={<Logout />} />
-				<Route path="/" element={<MainLayout />} />
-				<Route path="/ressources" element={<Ressources />} />
+				<Route path="/" element={<MainLayout />}>
+					<Route path="/ressources" element={<Ressources />} />
+					<Route path="cours" element={<Cours />} />
+				</Route>
 			</Route>
 		</Routes>
 	);

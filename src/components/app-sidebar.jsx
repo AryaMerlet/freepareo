@@ -15,6 +15,7 @@ import {
 	IconSearch,
 	IconSettings,
 	IconUsers,
+	IconMessage,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/components/nav-documents";
@@ -30,6 +31,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { NavMessages } from "./nav-messages";
 
 const data = {
 	user: {
@@ -44,14 +46,15 @@ const data = {
 			icon: IconDashboard,
 		},
 		{
-			title: "Ressources",
-			url: "/ressources",
+			title: "Ressource documentation",
+			url: "/ressource-documentation",
 			icon: IconListDetails,
 		},
+	],
+	navMessage: [
 		{
 			title: "Message",
-			url: "/chat",
-			icon: IconChartBar,
+			icon: IconMessage,
 		},
 	],
 	navSecondary: [
@@ -88,13 +91,14 @@ export function AppSidebar({ ...props }) {
 					<SidebarMenuItem>
 						<div className="data-[slot=sidebar-menu-button]:!p-1.5 flex items-center gap-2">
 							<IconInnerShadowTop className="!size-5" />
-							<span className="text-base font-semibold">FreePareo</span>
+							<span className="text-base font-semibold">LOGOOOOO</span>
 						</div>
 					</SidebarMenuItem>
 				</SidebarMenu>
 			</SidebarHeader>
 			<SidebarContent>
 				<NavMain items={data.navMain} />
+				<NavMessages items={data.navMessage} />
 				<NavDocuments items={data.Admin} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
