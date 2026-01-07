@@ -28,7 +28,6 @@ function App() {
         <Route path="/evaluation" element={<Evaluations />} />
         {/* Page visualisation d'une éval (paramètre id) */}
         <Route path="/evaluations/:id" element={<ViewEvaluation />} />
-        <Route path="/ressources" element={<Ressources />} />
       </Route>
     </Routes>
   );
