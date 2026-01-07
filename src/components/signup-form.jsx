@@ -112,8 +112,7 @@ export function SignupForm({ ...props }) {
 								required
 							/>
 							<FieldDescription>
-								We&apos;ll use this to contact you. We will not share your email
-								with anyone else.
+								User will receive an email to set their password.
 							</FieldDescription>
 						</Field>
 						<Field>
@@ -128,9 +127,6 @@ export function SignupForm({ ...props }) {
 									<SelectItem value={Role.ELEVE}>Elève</SelectItem>
 								</SelectContent>
 							</Select>
-							<FieldDescription>
-								User will receive an email to set their password.
-							</FieldDescription>
 						</Field>
 						<Field>
 							<FieldLabel htmlFor="groupe">Groupe</FieldLabel>
@@ -149,9 +145,6 @@ export function SignupForm({ ...props }) {
 									))}
 								</SelectContent>
 							</Select>
-							<FieldDescription>
-								Select the user's group.
-							</FieldDescription>
 						</Field>
 						<FieldGroup>
 							<Field>
