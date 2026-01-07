@@ -4,7 +4,7 @@ import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
-import Cours from "./components/cours.jsx";>
+import Cours from "./components/cours.jsx";
 import Users from "./components/users.jsx";
 
 function App() {
