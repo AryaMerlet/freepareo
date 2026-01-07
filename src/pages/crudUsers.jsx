@@ -88,7 +88,7 @@ export default function Users() {
         border: "1px solid #e0e0e0",
       }}
     >
-      <h2 style={{ marginBottom: 16 }}>Liste des utilisateurs</h2>
+      <h2 style={{ marginBottom: 16 }}>Ajouter un utilisateur</h2>
 
       <form
         onSubmit={createUser}
