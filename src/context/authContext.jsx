@@ -38,7 +38,7 @@ export const AuthContext = ({ children }) => {
 			console.error("Error signing in:", error);
 		} else {
 			const userProfile = {
-				...data.user.id,
+				...data.user,
 				profile: await getUserProfile(data.user.id),
 			};
 			setUser(userProfile);
