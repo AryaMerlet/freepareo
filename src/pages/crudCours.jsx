@@ -26,11 +26,13 @@ export default function Cours() {
     else setCours(data);
   }
 
-  // Ajout et modifier
+
+//ajout et modifif
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Modif
+
+//modif
     if (editingCours) {
       const { error } = await supabase
         .from("cours")
@@ -44,7 +46,8 @@ export default function Cours() {
 
       if (error) console.error("Erreur modification:", error);
     } else {
-      // Ajout
+
+//ajout
       const { error } = await supabase.from("cours").insert([formData]);
       if (error) console.error("Erreur ajout:", error);
     }
@@ -55,7 +58,8 @@ export default function Cours() {
     fetchCours();
   };
 
-  // Supprimer
+
+//supprimer
   const handleDelete = async (id) => {
     if (!confirm("Voulez-vous vraiment supprimer ce cours ?")) return;
     const { error } = await supabase.from("cours").delete().eq("id", id);
@@ -74,6 +78,11 @@ export default function Cours() {
     setShowForm(true);
   };
 
+
+
+
+
+//affichage
   return (
     <div
       style={{
