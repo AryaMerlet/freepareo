@@ -6,6 +6,7 @@ import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
 import Cours from "./components/cours.jsx";
 import Users from "./components/users.jsx";
+import Ressources from "./pages/ressources.jsx";
 
 function App() {
 	return (
