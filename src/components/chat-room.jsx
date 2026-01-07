@@ -19,7 +19,7 @@ export const ChatRoom = () => {
                 .order('created_at', { ascending: true })
 
             if (error) {
-                console.log(error);
+                console.error(error);
             }
 
             const msgMap = {};
@@ -167,7 +167,7 @@ export const ChatRoom = () => {
             .single()
 
         if (newMsgError) {
-            console.log(newMsgError);
+            console.error(newMsgError);
             return;
         }
 
@@ -177,7 +177,7 @@ export const ChatRoom = () => {
             .eq('id', rootId);
 
         if (error) {
-            console.log(error);
+            console.error(error);
         }
     }
 
@@ -194,7 +194,7 @@ export const ChatRoom = () => {
             });
 
         if (error) {
-            console.log(error);
+            console.error(error);
         }
 
         setWritingMessage('');
