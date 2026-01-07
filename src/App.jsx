@@ -4,6 +4,8 @@ import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
+import Evaluations from "./pages/evaluations/Evaluation.jsx";
+import ViewEvaluation from "./pages/evaluations/ViewEvaluation.jsx";
 import Cours from "./components/cours.jsx";
 import MarkdownEditor from "./components/MarkdownEditor.jsx";
 function App() {
@@ -20,6 +22,9 @@ function App() {
           <Route path="/ressource-documentation" element={<MarkdownEditor />} />
         </Route>
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/evaluation" element={<Evaluations />} />
+        {/* Page visualisation d'une éval (paramètre id) */}
+        <Route path="/evaluations/:id" element={<ViewEvaluation />} />
       </Route>
     </Routes>
   );
