@@ -16,6 +16,19 @@ export async function fetchCours() {
   }
 }
 
+export async function fetchCoursByUserId(userId) {
+  try {
+    const { data, error } = await supabase
+      .from("cours")
+      .select("id, nom")
+      .eq("id_prof", userId);
+    if (error) throw error;
+    return { data, error: null };
+  } catch (error) {
+    console.error("Erreur chargement cours:", error);
+    return { data: null, error };
+  }
+}
 export async function addCours(cours) {
   try {
     const { error } = await supabase.from("cours").insert([cours]);
@@ -49,9 +62,6 @@ export async function deleteCours(id) {
   }
 }
 
-
-
-
 export async function fetchProfs() {
   try {
     const { data, error } = await supabase
@@ -67,14 +77,9 @@ export async function fetchProfs() {
   }
 }
 
-
-
-
 export async function fetchGroups() {
   try {
-    const { data, error } = await supabase
-      .from("group") 
-      .select("id, nom");
+    const { data, error } = await supabase.from("group").select("id, nom");
 
     if (error) throw error;
     return { data, error: null };
