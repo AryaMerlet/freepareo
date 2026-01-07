@@ -13,7 +13,8 @@ export const AuthContext = ({ children }) => {
 			try {
 				const { data, error } = await supabase.auth.getSession();
 				const userProfile = {
-					...data.session.user, profile: await getUserProfile(data.session.user.id)
+					...data.session.user,
+					profile: await getUserProfile(data.session.user.id),
 				};
 
 				if (error) throw error;
@@ -36,7 +37,7 @@ export const AuthContext = ({ children }) => {
 		if (error) {
 			console.error("Error signing in:", error);
 		} else {
-			setUser(data.user);
+			setUser(data);
 		}
 	}
 
@@ -48,14 +49,22 @@ export const AuthContext = ({ children }) => {
 		setUser(null);
 	}
 
-	async function signUpNewUser(email, password) {
-		const { data, error } = await supabase.auth.signUp({
-			email: email,
-			password: password,
+	async function signUpNewUser(email, nom, prenom, role, groupe_id) {
+		const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
+			data: {
+				nom: nom,
+				prenom: prenom,
+				role: role,
+				groupe_id: groupe_id,
+			},
+			redirectTo: `${window.location.origin}/set-password`,
 		});
 		if (error) {
-			console.error("Error signing up:", error);
+			console.error("Error inviting user:", error);
+			throw error;
 		}
+
+		return data;
 	}
 
 	return (
