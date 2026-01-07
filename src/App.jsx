@@ -4,6 +4,7 @@ import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
+import Cours from "./pages/crudCours.jsx";
 import MarkdownEditor from "./components/MarkdownEditor.jsx";
 
 function App() {
@@ -15,9 +16,11 @@ function App() {
       {/* === Pages protégées === */}
       <Route element={<ProtectedRoute />}>
         <Route path="/logout" element={<Logout />} />
-        <Route path="/" element={<MainLayout />} />
+        <Route path="/" element={<MainLayout />}>
+          <Route path="cours" element={<Cours />} />
+          <Route path="/ressource-documentation" element={<MarkdownEditor />} />
+        </Route>
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/ressource-documentation" element={<MarkdownEditor />} />
       </Route>
     </Routes>
   );
