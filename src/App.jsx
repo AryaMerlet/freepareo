@@ -6,6 +6,7 @@ import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
 import Evaluations from "./pages/evaluations/Evaluation.jsx";
 import ViewEvaluation from "./pages/evaluations/ViewEvaluation.jsx";
+import Cours from "./pages/crudCours.jsx";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/logout" element={<Logout />} />
         <Route path="/" element={<MainLayout />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="cours" element={<Cours />} />
         <Route path="/evaluation" element={<Evaluations />} />
         {/* Page visualisation d'une éval (paramètre id) */}
         <Route path="/evaluations/:id" element={<ViewEvaluation />} />
