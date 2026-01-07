@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { useAuth } from "@/context/AuthContext";
+import { useAuth } from "@/context/authContext";
 
 export default function LoginForm({ className, ...props }) {
 	const [email, setemail] = useState("");
@@ -74,9 +74,6 @@ export default function LoginForm({ className, ...props }) {
 							</Field>
 							<Field>
 								<Button type="submit">Login</Button>
-								<FieldDescription className="text-center">
-									Don&apos;t have an account? <a href="/signup">Sign up</a>
-								</FieldDescription>
 							</Field>
 						</FieldGroup>
 					</form>
