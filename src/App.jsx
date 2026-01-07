@@ -7,6 +7,7 @@ import Logout from "./pages/logout.jsx";
 import Evaluations from "./pages/evaluations/Evaluation.jsx";
 import ViewEvaluation from "./pages/evaluations/ViewEvaluation.jsx";
 import Cours from "./components/cours.jsx";
+import MarkdownEditor from "./components/MarkdownEditor.jsx";
 function App() {
   return (
     <Routes>
@@ -16,9 +17,11 @@ function App() {
       {/* === Pages protégées === */}
       <Route element={<ProtectedRoute />}>
         <Route path="/logout" element={<Logout />} />
-        <Route path="/" element={<MainLayout />} />
+        <Route path="/" element={<MainLayout />}>
+          <Route path="cours" element={<Cours />} />
+          <Route path="/ressource-documentation" element={<MarkdownEditor />} />
+        </Route>
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="cours" element={<Cours />} />
         <Route path="/evaluation" element={<Evaluations />} />
         {/* Page visualisation d'une éval (paramètre id) */}
         <Route path="/evaluations/:id" element={<ViewEvaluation />} />
