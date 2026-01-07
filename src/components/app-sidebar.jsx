@@ -89,8 +89,8 @@ export function AppSidebar({ ...props }) {
 			<SidebarHeader>
 				<SidebarMenu>
 					<SidebarMenuItem>
-						<div className="data-[slot=sidebar-menu-button]:!p-1.5 flex items-center gap-2">
-							<IconInnerShadowTop className="!size-5" />
+						<div className="data-[slot=sidebar-menu-button]:p-1.5 flex items-center gap-2">
+							<IconInnerShadowTop className="size-5!" />
 							<span className="text-base font-semibold">LOGOOOOO</span>
 						</div>
 					</SidebarMenuItem>
