@@ -225,7 +225,7 @@ export default function MarkdownEditor() {
                     className="min-h-40 font-mono"
                   />
                 ) : (
-                  <CommentaireWrapper>
+                  <CommentaireWrapper resourceId={r.id}>
 
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                       {r.content}
