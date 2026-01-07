@@ -3,7 +3,7 @@ import supabase from "@/utils/supabase";
 // Create a new groupe
 export const createGroupe = async (nom, annee) => {
 	const { data, error } = await supabase
-		.from("groupe")
+		.from("group")
 		.insert([{ nom, annee }])
 		.select()
 		.single();
@@ -19,7 +19,7 @@ export const createGroupe = async (nom, annee) => {
 // Get all groupes
 export const getGroupes = async () => {
 	const { data, error } = await supabase
-		.from("groupe")
+		.from("group")
 		.select("*")
 		.order("annee", { ascending: false })
 		.order("nom", { ascending: true });
@@ -35,7 +35,7 @@ export const getGroupes = async () => {
 // Get a single groupe by ID
 export const getGroupeById = async (id) => {
 	const { data, error } = await supabase
-		.from("groupe")
+		.from("group")
 		.select("*")
 		.eq("id", id)
 		.single();
@@ -51,7 +51,7 @@ export const getGroupeById = async (id) => {
 // Get groupes by year
 export const getGroupesByAnnee = async (annee) => {
 	const { data, error } = await supabase
-		.from("groupe")
+		.from("group")
 		.select("*")
 		.eq("annee", annee)
 		.order("nom", { ascending: true });
@@ -67,7 +67,7 @@ export const getGroupesByAnnee = async (annee) => {
 // Update a groupe
 export const updateGroupe = async (id, updates) => {
 	const { data, error } = await supabase
-		.from("groupe")
+		.from("group")
 		.update(updates)
 		.eq("id", id)
 		.select()
@@ -83,7 +83,7 @@ export const updateGroupe = async (id, updates) => {
 
 // Delete a groupe
 export const deleteGroupe = async (id) => {
-	const { error } = await supabase.from("groupe").delete().eq("id", id);
+	const { error } = await supabase.from("group").delete().eq("id", id);
 
 	if (error) {
 		console.error("Error deleting groupe:", error);
