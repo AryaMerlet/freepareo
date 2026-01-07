@@ -16,6 +16,7 @@ import {
 	IconSettings,
 	IconUsers,
 	IconMessage,
+	IconBook,
 } from "@tabler/icons-react";
 
 import { NavDocuments } from "@/components/nav-documents";
@@ -31,15 +32,17 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useAuth } from "@/context/authContext";
 import { NavMessages } from "./nav-messages";
+import { Navigate } from "react-router-dom";
 
 const data = {
-	user: {
-		name: "shadcn",
-		email: "m@example.com",
-		avatar: "/avatars/shadcn.jpg",
-	},
 	navMain: [
+		{
+			title: "Mes cours",
+			url: "/cours",
+			icon: IconBook,
+		},
 		{
 			title: "Evalutatioon",
 			url: "/evaluation",
@@ -49,41 +52,30 @@ const data = {
 			title: "Ressource documentation",
 			url: "/ressource-documentation",
 			icon: IconListDetails,
-		}
+		},
 	],
 	navMessage: [
 		{
 			title: "Message",
 			icon: IconMessage,
-		}
-	],
-	navSecondary: [
-		{
-			title: "Settings",
-			url: "/settings",
-			icon: IconSettings,
 		},
 	],
+	navSecondary: [],
 	Admin: [
 		{
-			name: "Utilisateurs",
-			url: "/users",
-			icon: IconDatabase,
-		},
-		{
-			name: "Cours",
-			url: "/cours",
+			name: "Gestion des cours",
+			url: "/admin/cours",
 			icon: IconReport,
-		},
-		{
-			name: "dashboard Admin",
-			url: "/admin-dashboard",
-			icon: IconFileAi,
 		},
 	],
 };
 
 export function AppSidebar({ ...props }) {
+	const { user } = useAuth();
+	if (!user) {
+		return <Navigate to="/login" />;
+	}
+
 	return (
 		<Sidebar collapsible="offcanvas" {...props}>
 			<SidebarHeader>
@@ -103,7 +95,7 @@ export function AppSidebar({ ...props }) {
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
-				<NavUser user={data.user} />
+				<NavUser user={user.profile} />
 			</SidebarFooter>
 		</Sidebar>
 	);

@@ -75,8 +75,19 @@ export default function AddDialog({ open, onClose, onCreated }) {
 
     if (ext === "csv") {
       setFileType("csv");
-      const parsed = csvParse(text, { columns: true });
-      setContenu(Array.isArray(parsed) ? parsed : []);
+      // Parse CSV and preserve column order
+      const parsed = csvParse(text, { columns: true, skip_empty_lines: true });
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        // Extract headers in original order from first row
+        const headers = Object.keys(parsed[0]);
+        // Store with headers to preserve order
+        setContenu({
+          headers: headers,
+          rows: parsed,
+        });
+      } else {
+        setContenu({ headers: [], rows: [] });
+      }
     }
   };
   // obligation de remplissage
@@ -148,9 +159,9 @@ export default function AddDialog({ open, onClose, onCreated }) {
             </div>
           )}
 
-          {fileType === "csv" && Array.isArray(contenu) && (
+          {fileType === "csv" && contenu && contenu.rows && (
             <div className="max-h-64 overflow-auto border p-2">
-              <CsvViewer rows={contenu} />
+              <CsvViewer rows={contenu.rows} headers={contenu.headers} />
             </div>
           )}
         </div>

@@ -35,7 +35,11 @@ export default function ViewEvaluation() {
 
       // déterminer le type de contenu
       if (typeof evalData.contenu === "string") setFileType("md");
-      else if (Array.isArray(evalData.contenu)) setFileType("csv");
+      else if (
+        Array.isArray(evalData.contenu) ||
+        (evalData.contenu && evalData.contenu.rows)
+      )
+        setFileType("csv");
       else setFileType(null);
 
       // affichage de nom de cours
@@ -74,9 +78,15 @@ export default function ViewEvaluation() {
       {/* contenu  */}
       {fileType === "md" && <MarkdownViewer markdown={evaluation.contenu} />}
 
-      {fileType === "csv" && Array.isArray(evaluation.contenu) && (
-        <CsvViewer rows={evaluation.contenu} />
-      )}
+      {fileType === "csv" &&
+        (evaluation.contenu?.rows ? (
+          <CsvViewer
+            rows={evaluation.contenu.rows}
+            headers={evaluation.contenu.headers}
+          />
+        ) : Array.isArray(evaluation.contenu) ? (
+          <CsvViewer rows={evaluation.contenu} />
+        ) : null)}
 
       {!fileType && (
         <p className="text-sm text-muted-foreground">

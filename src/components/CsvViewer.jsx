@@ -1,8 +1,13 @@
-export default function CsvViewer({ rows }) {
+export default function CsvViewer({ rows, headers }) {
   // pas de données
   if (!Array.isArray(rows) || rows.length === 0) return null;
 
-  const headers = Object.keys(rows[0]);
+  // Use provided headers if available, otherwise fallback to Object.keys
+  // This preserves the original CSV column order
+  const columnHeaders =
+    headers && Array.isArray(headers) && headers.length > 0
+      ? headers
+      : Object.keys(rows[0]);
 
   return (
     <div className="overflow-x-auto">
@@ -10,7 +15,7 @@ export default function CsvViewer({ rows }) {
       <table className="w-full border-collapse text-sm">
         <thead>
           <tr className="border-b">
-            {headers.map((h) => (
+            {columnHeaders.map((h) => (
               <th
                 key={h}
                 className="px-3 py-2 text-left font-semibold text-muted-foreground"
@@ -24,7 +29,7 @@ export default function CsvViewer({ rows }) {
         <tbody>
           {rows.map((row, i) => (
             <tr key={i} className="border-b last:border-b-0 hover:bg-muted/40">
-              {headers.map((h) => (
+              {columnHeaders.map((h) => (
                 <td key={h} className="px-3 py-2 align-top">
                   {row[h] ?? ""}
                 </td>

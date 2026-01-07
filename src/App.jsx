@@ -8,8 +8,9 @@ import Evaluations from "./pages/evaluations/Evaluation.jsx";
 import ViewEvaluation from "./pages/evaluations/ViewEvaluation.jsx";
 import Cours from "./components/cours.jsx";
 import MarkdownEditor from "./components/MarkdownEditor.jsx";
-import Users from "./components/users.jsx";
-
+import { Home } from "./pages/home.jsx";
+import { CoursPage } from "./pages/cours.jsx";
+import { CoursDetails } from "./components/coursDetails.jsx";
 function App() {
   return (
     <Routes>
@@ -19,15 +20,17 @@ function App() {
       {/* === Pages protégées === */}
       <Route element={<ProtectedRoute />}>
         <Route path="/logout" element={<Logout />} />
-        <Route path="/" element={<MainLayout />}>
-          <Route path="users" element={<Users />} />
-          <Route path="cours" element={<Cours />} />
+        <Route element={<MainLayout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/cours" element={<CoursPage />} />
+          <Route path="/cours/:id" element={<CoursDetails />} />
+          <Route path="/admin/cours" element={<Cours />} />
           <Route path="/ressource-documentation" element={<MarkdownEditor />} />
+          <Route path="/evaluation" element={<Evaluations />} />
+          <Route path="/evaluations/:id" element={<ViewEvaluation />} />
         </Route>
         <Route path="/signup" element={<SignupPage />} />
-        <Route path="/evaluation" element={<Evaluations />} />
         {/* Page visualisation d'une éval (paramètre id) */}
-        <Route path="/evaluations/:id" element={<ViewEvaluation />} />
       </Route>
     </Routes>
   );
