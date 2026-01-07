@@ -5,6 +5,7 @@ import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
 import Ressources from "./pages/ressources.jsx";
+import Cours from "./pages/crudCours.jsx";
 
 function App() {
 	return (
@@ -15,7 +16,9 @@ function App() {
 			{/* === Pages protégées === */}
 			<Route element={<ProtectedRoute />}>
 				<Route path="/logout" element={<Logout />} />
-				<Route path="/" element={<MainLayout />} />
+				<Route path="/" element={<MainLayout />}>
+					<Route path="cours" element={<Cours />} />
+				</Route>
 				<Route path="/signup" element={<SignupPage />} />
 				<Route path="/ressources" element={<Ressources />} />
 			</Route>
