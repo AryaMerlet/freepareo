@@ -1,35 +1,29 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Routes, Route } from "react-router-dom";
+import { MainLayout } from "./components/MainLayout.jsx";
+import ProtectedRoute from "./pages/protectedRoute.jsx";
+import LoginPage from "./pages/login.jsx";
+import SignupPage from "./pages/signup.jsx";
+import Logout from "./pages/logout.jsx";
+import Cours from "./components/cours.jsx";
+import Users from "./components/users.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
+	return (
+		<Routes>
+			{/* === Pages publiques === */}
+			<Route path="/login" element={<LoginPage />} />
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+			{/* === Pages protégées === */}
+			<Route element={<ProtectedRoute />}>
+				<Route path="/logout" element={<Logout />} />
+				<Route path="/" element={<MainLayout />}>
+					<Route path="users" element={<Users />} />
+					<Route path="cours" element={<Cours />} />
+				</Route>
+				<Route path="/signup" element={<SignupPage />} />
+			</Route>
+		</Routes>
+	);
 }
 
-export default App
+export default App;
