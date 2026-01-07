@@ -37,13 +37,7 @@ export const AuthContext = ({ children }) => {
 		if (error) {
 			console.error("Error signing in:", error);
 		} else {
-			const { data: userData, userError } = await supabase
-				.from("users")
-				.select("*")
-				.eq("id", data.session.user.id)
-				.single();
-			if (userError) throw userError;
-			setUser(userData);
+			setUser(data);
 		}
 	}
 

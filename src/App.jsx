@@ -5,6 +5,7 @@ import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
 import Ressources from "./pages/ressources.jsx";
+import AdminRoute from "./pages/adminRoute.jsx";
 
 function App() {
 	return (
@@ -14,9 +15,12 @@ function App() {
 
 			{/* === Pages protégées === */}
 			<Route element={<ProtectedRoute />}>
+				<Route element={<AdminRoute />}>
+					<Route path="/signup" element={<SignupPage />} />
+					{/* Ajoutez ici les routes accessibles uniquement par les admins */}
+				</Route>
 				<Route path="/logout" element={<Logout />} />
 				<Route path="/" element={<MainLayout />} />
-				<Route path="/signup" element={<SignupPage />} />
 				<Route path="/ressources" element={<Ressources />} />
 			</Route>
 		</Routes>
