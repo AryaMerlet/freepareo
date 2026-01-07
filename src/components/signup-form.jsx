@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Role } from "@/utils/role";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
 	Select,
 	SelectItem,
@@ -23,13 +23,28 @@ import {
 	SelectContent,
 } from "./ui/select";
 import { useAuth } from "../context/authContext";
+import { getGroupes } from "../services/groupeService";
 
 export function SignupForm({ ...props }) {
 	const [role, setRole] = useState("");
 	const [email, setemail] = useState("");
 	const [nom, setNom] = useState("");
 	const [prenom, setPrenom] = useState("");
+	const [groupes, setGroupes] = useState([]);
+	const [selectedGroupe, setSelectedGroupe] = useState("");
 	const { signUpNewUser } = useAuth();
+
+	useEffect(() => {
+		const fetchGroupes = async () => {
+			try {
+				const data = await getGroupes();
+				setGroupes(data);
+			} catch (error) {
+				console.error("Error loading groupes:", error);
+			}
+		};
+		fetchGroupes();
+	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -39,9 +54,12 @@ export function SignupForm({ ...props }) {
 				formData.get("email"),
 				formData.get("nom"),
 				formData.get("prenom"),
-				role
+				role,
+				selectedGroupe
 			);
-			alert("User invited successfully! They will receive an email to set their password.");
+			alert(
+				"User invited successfully! They will receive an email to set their password."
+			);
 		} catch (error) {
 			alert("Error inviting user: " + error.message);
 		}
@@ -112,6 +130,27 @@ export function SignupForm({ ...props }) {
 							</Select>
 							<FieldDescription>
 								User will receive an email to set their password.
+							</FieldDescription>
+						</Field>
+						<Field>
+							<FieldLabel htmlFor="groupe">Groupe</FieldLabel>
+							<Select
+								value={selectedGroupe}
+								onValueChange={(value) => setSelectedGroupe(value)}
+							>
+								<SelectTrigger>
+									<SelectValue placeholder="Select groupe" />
+								</SelectTrigger>
+								<SelectContent>
+									{groupes.map((g) => (
+										<SelectItem key={g.id} value={g.id}>
+											{g.nom} ({g.annee})
+										</SelectItem>
+									))}
+								</SelectContent>
+							</Select>
+							<FieldDescription>
+								Select the user's group.
 							</FieldDescription>
 						</Field>
 						<FieldGroup>

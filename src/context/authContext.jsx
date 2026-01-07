@@ -49,12 +49,13 @@ export const AuthContext = ({ children }) => {
 		setUser(null);
 	}
 
-	async function signUpNewUser(email, nom, prenom, role) {
+	async function signUpNewUser(email, nom, prenom, role, groupe_id) {
 		const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, {
 			data: {
 				nom: nom,
 				prenom: prenom,
 				role: role,
+				groupe_id: groupe_id,
 			},
 			redirectTo: `${window.location.origin}/set-password`,
 		});
