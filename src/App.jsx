@@ -4,23 +4,27 @@ import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
+import Evaluations from "./pages/evaluations/Evaluation.jsx";
+import ViewEvaluation from "./pages/evaluations/ViewEvaluation.jsx";
 import Cours from "./components/cours.jsx";
 function App() {
-	return (
-		<Routes>
-			{/* === Pages publiques === */}
-			<Route path="/login" element={<LoginPage />} />
+  return (
+    <Routes>
+      {/* === Pages publiques === */}
+      <Route path="/login" element={<LoginPage />} />
 
-			{/* === Pages protégées === */}
-			<Route element={<ProtectedRoute />}>
-				<Route path="/logout" element={<Logout />} />
-				<Route path="/" element={<MainLayout />}>
-					<Route path="cours" element={<Cours />} />
-				</Route>
-				<Route path="/signup" element={<SignupPage />} />
-			</Route>
-		</Routes>
-	);
+      {/* === Pages protégées === */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/logout" element={<Logout />} />
+        <Route path="/" element={<MainLayout />} />
+        <Route path="/signup" element={<SignupPage />} />
+        <Route path="cours" element={<Cours />} />
+        <Route path="/evaluation" element={<Evaluations />} />
+        {/* Page visualisation d'une éval (paramètre id) */}
+        <Route path="/evaluations/:id" element={<ViewEvaluation />} />
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;
