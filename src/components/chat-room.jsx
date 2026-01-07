@@ -1,68 +1,60 @@
 import { useEffect, useState, useRef } from 'react'
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatMessages } from "./chat-messages"
-import supabase from '@/utils/supabase'
 import { ChatInput } from './chat-input'
 import { useAuth } from '@/context/authContext'
+import { chatService } from '@/service/chatService'
 
 export const ChatRoom = () => {
     const [messages, setMessages] = useState([]);
     const [writingMessage, setWritingMessage] = useState('');
     const scrollRef = useRef(null);
     const { user } = useAuth();
+    const [isLoading, setIsLoading] = useState(true);
 
+    // Initial load
     useEffect(() => {
-        const getMessages = async () => {
-            const { data, error } = await supabase
-                .from('message')
-                .select('*, user(*)')
-                .order('created_at', { ascending: true })
-
-            if (error) {
-                console.log(error);
+        const loadMessages = async () => {
+            setIsLoading(true);
+            const structuredMessages = await chatService.getMessages();
+            if (structuredMessages) {
+                setMessages(structuredMessages);
             }
-            console.log(data);
-
-            setMessages(data || []);
+            setIsLoading(false);
         }
 
-        getMessages();
+        loadMessages();
+    }, []);
 
-        const channel = supabase
-            .channel('schema-db-changes')
-            .on(
-                'postgres_changes',
-                {
-                    event: 'INSERT',
-                    schema: 'public',
-                    table: 'message',
-                },
-                (payload) => {
-                    setMessages((currentMessages) => [...currentMessages, payload.new])
-                }
-            )
-            .on(
-                'postgres_changes',
-                {
-                    event: 'UPDATE',
-                    schema: 'public',
-                    table: 'message',
-                },
-                (payload) => {
-                    setMessages((currentMessages) =>
-                        currentMessages.map((msg) =>
-                            msg.id === payload.new.id ? payload.new : msg
-                        )
-                    )
-                }
-            )
-            .subscribe()
+    // Real-time subscription
+    useEffect(() => {
+        const handleInsert = async (newMessage) => {
+            let fullMessage = { ...newMessage };
+
+            // optimization: if it's me, I know my profile
+            if (fullMessage.id_user === user?.id && user?.profile) {
+                fullMessage.user = user.profile;
+            } else {
+                // otherwise fetch full details to get user info
+                const fetched = await chatService.getMessageById(fullMessage.id);
+                if (fetched) fullMessage = fetched;
+            }
+
+            setMessages((current) => chatService.mergeNewMessage(current, fullMessage));
+        };
+
+        const handleUpdate = (updatedMessage) => {
+            setMessages((current) => chatService.mergeUpdatedMessage(current, updatedMessage));
+        };
+
+        const channel = chatService.subscribeToChanges(handleInsert, handleUpdate);
 
         return () => {
-            supabase.removeChannel(channel)
+            chatService.unsubscribe(channel);
         }
-    }, [])
+    }, [user]);
 
+    // Auto-scroll logic
     useEffect(() => {
         const scrollToBottom = () => {
             if (scrollRef.current) {
@@ -78,34 +70,35 @@ export const ChatRoom = () => {
         return () => clearTimeout(timeoutId);
     }, [messages]);
 
-    const updateMessage = async (id, newContent) => {
-        const { error } = await supabase
-            .from('message')
-            .update({ contenu: newContent })
-            .eq('id', id);
+    const updateMessage = async (rootId, newContent) => {
+        // Find message to get original timestamp
+        const findMessage = (nodes, id) => {
+            for (const node of nodes) {
+                if (node.id === id) return node;
+                if (node.versions?.length) {
+                    const found = findMessage(node.versions, id);
+                    if (found) return found;
+                }
+            }
+            return null;
+        };
 
-        if (error) {
-            console.log(error);
-        }
+        const rootMsg = findMessage(messages, rootId);
+        if (!rootMsg) return;
+
+        await chatService.editMessage(rootId, newContent, user.id, rootMsg.created_at);
+        // State update is handled by subscription
     }
 
     const sendMessage = async (e) => {
-
         e.preventDefault();
-        if ((!writingMessage.trim())) return;
+        const content = writingMessage;
+        if (!content.trim()) return;
 
-        const { error } = await supabase
-            .from('message')
-            .insert({
-                contenu: writingMessage,
-                id_user: user.id,
-            });
+        setWritingMessage(''); // Optimistic clear
 
-        if (error) {
-            console.log(error);
-        }
-
-        setWritingMessage('');
+        await chatService.sendMessage(content, user.id);
+        // State update is handled by subscription
     }
 
     return (
@@ -124,3 +117,4 @@ export const ChatRoom = () => {
         </div>
     )
 }
+
