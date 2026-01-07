@@ -1,19 +1,19 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
-import MarkdownEditor from "./components/MarkdownEditor";
+import { Routes, Route } from "react-router-dom";
+import { MainLayout } from "./components/MainLayout.jsx";
+import MarkdownEditor from "./components/MarkdownEditor.jsx";
 
 function App() {
-  const [count, setCount] = useState(0);
-
   return (
-    <>
-      <div>
-        <h1>Création de ressources</h1>
-        <MarkdownEditor />
-      </div>
-    </>
+    <Routes>
+      {/* <Route element={<AuthLayout />}>
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+      </Route>
+      <Route element={<AuthCheck />}> */}
+      <Route path="/" element={<MainLayout />} />
+      <Route path="/ressource-documentation" element={<MarkdownEditor />} />
+      {/* </Route> */}
+    </Routes>
   );
 }
 
