@@ -4,14 +4,9 @@ import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
 import SignupPage from "./pages/signup.jsx";
 import Logout from "./pages/logout.jsx";
-<<<<<<< HEAD
 import Evaluations from "./pages/evaluations/Evaluation.jsx";
 import ViewEvaluation from "./pages/evaluations/ViewEvaluation.jsx";
-import Cours from "./pages/crudCours.jsx";
-
-=======
 import Cours from "./components/cours.jsx";
->>>>>>> origin/dev
 function App() {
   return (
     <Routes>
