@@ -13,6 +13,7 @@ import { Home } from "./pages/home.jsx";
 import { CoursPage } from "./pages/cours.jsx";
 import { CoursDetails } from "./components/coursDetails.jsx";
 import AdminRoute from "./pages/adminRoute.jsx";
+import Users from "./components/crudUsers.jsx";
 
 function App() {
 	return (
@@ -36,6 +37,7 @@ function App() {
 					<Route path="/ressource-documentation" element={<MarkdownEditor />} />
 					<Route path="/evaluation" element={<Evaluations />} />
 					<Route path="/evaluations/:id" element={<ViewEvaluation />} />
+					<Route path="/admin/users" element={<Users />} />
 				</Route>
 				<Route path="/signup" element={<SignupPage />} />
 				{/* Page visualisation d'une éval (paramètre id) */}
