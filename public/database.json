@@ -182,7 +182,7 @@
   {
     "table_schema": "public",
     "table_name": "evaluation",
-    "column_name": "id_cours",
+    "column_name": "id_matiere",
     "data_type": "uuid",
     "character_maximum_length": null,
     "column_default": null,
@@ -192,7 +192,7 @@
     "array_element_type": null,
     "is_primary_key": null,
     "is_foreign_key": "FK",
-    "constraints": "FOREIGN KEY REFERENCES public.cours"
+    "constraints": "FOREIGN KEY REFERENCES public.matiere"
   },
   {
     "table_schema": "public",
@@ -631,22 +631,7 @@
   },
   {
     "table_schema": "public",
-    "table_name": "ressource_cours",
-    "column_name": "id_cours",
-    "data_type": "uuid",
-    "character_maximum_length": null,
-    "column_default": null,
-    "is_nullable": "NO",
-    "udt_name": "uuid",
-    "is_array": "false",
-    "array_element_type": null,
-    "is_primary_key": "PK",
-    "is_foreign_key": "FK",
-    "constraints": "FOREIGN KEY REFERENCES public.cours, PRIMARY KEY"
-  },
-  {
-    "table_schema": "public",
-    "table_name": "ressource_cours",
+    "table_name": "ressource_matiere",
     "column_name": "id_ressource",
     "data_type": "uuid",
     "character_maximum_length": null,
@@ -658,6 +643,21 @@
     "is_primary_key": "PK",
     "is_foreign_key": "FK",
     "constraints": "FOREIGN KEY REFERENCES public.ressource, PRIMARY KEY"
+  },
+  {
+    "table_schema": "public",
+    "table_name": "ressource_matiere",
+    "column_name": "id_matiere",
+    "data_type": "uuid",
+    "character_maximum_length": null,
+    "column_default": null,
+    "is_nullable": "NO",
+    "udt_name": "uuid",
+    "is_array": "false",
+    "array_element_type": null,
+    "is_primary_key": "PK",
+    "is_foreign_key": "FK",
+    "constraints": "FOREIGN KEY REFERENCES public.matiere, PRIMARY KEY"
   },
   {
     "table_schema": "public",

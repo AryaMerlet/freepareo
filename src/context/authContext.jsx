@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext, createContext } from "react";
 import supabase from "./../utils/supabase";
-import { getUserProfile } from "@/service/userService";
+import { getUserProfile } from "@/services/userService";
 
 const Auth = createContext();
 
@@ -21,6 +21,8 @@ export const AuthContext = ({ children }) => {
 				setUser(userProfile);
 			} catch (err) {
 				setUser(null);
+				console.log(err);
+
 				console.error("No active session:", err.message);
 			} finally {
 				setIsLoading(false);
@@ -38,7 +40,7 @@ export const AuthContext = ({ children }) => {
 			console.error("Error signing in:", error);
 		} else {
 			const userProfile = {
-				...data.user,
+				...data.session.user,
 				profile: await getUserProfile(data.user.id),
 			};
 			setUser(userProfile);
