@@ -42,7 +42,10 @@ export const CommentaireWrapper = ({ resourceId, children }) => {
 		if (text.length > 0) {
 			const range = selectionObj.getRangeAt(0);
 			//Used to prevent the popup from appearing when the user selects text outside the content area. range.common
-			if (contentRef.current && !contentRef.current.contains(range.commonAncestorContainer)) {
+			if (
+				contentRef.current &&
+				!contentRef.current.contains(range.commonAncestorContainer)
+			) {
 				setShowPopup(false);
 				return;
 			}
@@ -124,10 +127,19 @@ export const CommentaireWrapper = ({ resourceId, children }) => {
 							placeholder="Add a comment..."
 						/>
 						<div className="flex justify-end gap-2">
-							<Button variant="ghost" size="sm" onClick={() => setShowPopup(false)} className={"hover:text-red-500"}>
+							<Button
+								variant="ghost"
+								size="sm"
+								onClick={() => setShowPopup(false)}
+								className={"hover:text-red-500"}
+							>
 								Cancel
 							</Button>
-							<Button size="sm" onClick={saveComment} className={"hover:text-green-500"}>
+							<Button
+								size="sm"
+								onClick={saveComment}
+								className={"hover:text-green-500"}
+							>
 								Save
 							</Button>
 						</div>
@@ -160,4 +172,4 @@ export const CommentaireWrapper = ({ resourceId, children }) => {
 			</div>
 		</div>
 	);
-}
+};
