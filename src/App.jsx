@@ -13,6 +13,7 @@ import { Home } from "./pages/home.jsx";
 import { CoursPage } from "./pages/cours.jsx";
 import { CoursDetails } from "./components/coursDetails.jsx";
 import AdminRoute from "./pages/adminRoute.jsx";
+import Users from "./components/crudUsers.jsx";
 import Profile from "./components/profile.jsx";
 
 
@@ -38,6 +39,7 @@ function App() {
 					<Route path="/ressource-documentation" element={<MarkdownEditor />} />
 					<Route path="/evaluation" element={<Evaluations />} />
 					<Route path="/evaluations/:id" element={<ViewEvaluation />} />
+					<Route path="/admin/users" element={<Users />} />
 					<Route path="/profile" element={<Profile />} />
 				</Route>
 			</Route>
