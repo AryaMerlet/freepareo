@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import { MainLayout } from "./components/MainLayout.jsx";
 import ProtectedRoute from "./pages/protectedRoute.jsx";
 import LoginPage from "./pages/login.jsx";
@@ -14,6 +14,8 @@ import { CoursPage } from "./pages/cours.jsx";
 import { CoursDetails } from "./components/coursDetails.jsx";
 import AdminRoute from "./pages/adminRoute.jsx";
 import Users from "./components/crudUsers.jsx";
+import Profile from "./components/profile.jsx";
+
 
 function App() {
 	return (
@@ -38,10 +40,10 @@ function App() {
 					<Route path="/evaluation" element={<Evaluations />} />
 					<Route path="/evaluations/:id" element={<ViewEvaluation />} />
 					<Route path="/admin/users" element={<Users />} />
+					<Route path="/profile" element={<Profile />} />
 				</Route>
-				<Route path="/signup" element={<SignupPage />} />
-				{/* Page visualisation d'une éval (paramètre id) */}
 			</Route>
+			<Route path="/signup" element={<SignupPage />} />
 		</Routes>
 	);
 }
