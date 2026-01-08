@@ -3,7 +3,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { ChatMessages } from "./chat-messages"
 import { ChatInput } from './chat-input'
 import { useAuth } from '@/context/authContext'
-import { chatService } from '@/service/chatService'
+import { chatService } from '@/services/chatService'
 
 export const ChatRoom = () => {
     const [messages, setMessages] = useState([]);

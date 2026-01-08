@@ -6,5 +6,8 @@ import LoginForm from "../components/login-form";
 export default function Login() {
 	const { user } = useAuth();
 
-	return user ? <Navigate to="/" /> : <LoginForm />;
+	if (user) {
+		return <Navigate to="/" replace />;
+	}
+	return <LoginForm />;
 }
