@@ -11,7 +11,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import "@/markdown.css";
 import { CommentaireWrapper } from "./commentaire-wrapper";
 
-export default function MarkdownEditor() {
+export default function MarkdownEditor({ id_matiere }) {
   const [title, setTitle] = useState("");
   const [value, setValue] = useState("");
   const [showPreview, setShowPreview] = useState(false);
@@ -66,11 +66,22 @@ export default function MarkdownEditor() {
   const handleValidate = async () => {
     if (!title.trim() || !value.trim() || !user) return;
 
-    const { error } = await supabase.from("ressource").insert({
-      nom: title,
-      content: value,
-      id_prof: user.id,
-    });
+    const { data, error } = await supabase
+      .from("ressource")
+      .upsert({
+        nom: title,
+        content: value,
+        id_prof: user.id,
+      })
+      .select()
+      .single();
+
+    if (data) {
+      await supabase.from("ressource_matiere").insert({
+        id_ressource: data.id,
+        id_matiere: id_matiere,
+      });
+    }
 
     if (!error) {
       setTitle("");
@@ -120,7 +131,7 @@ export default function MarkdownEditor() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-4 gap-6">
+    <div className="flex flex-col items-center  p-4 gap-6">
       <Card className="max-w-3xl w-full">
         <CardHeader className="flex flex-row items-center justify-between">
           <h2 className="text-lg font-semibold">Création de ressources</h2>
@@ -175,7 +186,7 @@ export default function MarkdownEditor() {
         </CardContent>
       </Card>
 
-      <div className="max-w-3xl w-full space-y-4">
+      {/* <div className="max-w-3xl w-full space-y-4">
         {ressources.map((r) => {
           const isOwner = user && user.id === r.id_prof;
 
@@ -245,7 +256,7 @@ export default function MarkdownEditor() {
             </Card>
           );
         })}
-      </div>
+      </div> */}
     </div>
   );
 }

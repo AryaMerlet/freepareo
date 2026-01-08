@@ -16,36 +16,34 @@ import AdminRoute from "./pages/adminRoute.jsx";
 import Users from "./components/crudUsers.jsx";
 import Profile from "./components/profile.jsx";
 
-
 function App() {
-	return (
-		<Routes>
-			{/* === Pages publiques === */}
-			<Route path="/login" element={<LoginPage />} />
-			<Route path="/set-password" element={<SetPasswordPage />} />
+  return (
+    <Routes>
+      {/* === Pages publiques === */}
+      <Route path="/login" element={<LoginPage />} />
+      <Route path="/set-password" element={<SetPasswordPage />} />
 
-			{/* === Pages protégées === */}
-			<Route element={<ProtectedRoute />}>
-				<Route path="/logout" element={<Logout />} />
+      {/* === Pages protégées === */}
+      <Route element={<ProtectedRoute />}>
+        <Route path="/logout" element={<Logout />} />
 
-				<Route element={<MainLayout />}>
-					<Route element={<AdminRoute />}>
-						<Route path="/signup" element={<SignupPage />} />
-					</Route>
-					<Route path="/" element={<Home />} />
-					<Route path="/cours" element={<CoursPage />} />
-					<Route path="/cours/:id" element={<CoursDetails />} />
-					<Route path="/admin/cours" element={<Cours />} />
-					<Route path="/ressource-documentation" element={<MarkdownEditor />} />
-					<Route path="/evaluation" element={<Evaluations />} />
-					<Route path="/evaluations/:id" element={<ViewEvaluation />} />
-					<Route path="/admin/users" element={<Users />} />
-					<Route path="/profile" element={<Profile />} />
-				</Route>
-			</Route>
-			<Route path="/signup" element={<SignupPage />} />
-		</Routes>
-	);
+        <Route element={<MainLayout />}>
+          <Route element={<AdminRoute />}>
+            <Route path="/signup" element={<SignupPage />} />
+          </Route>
+          <Route path="/" element={<Home />} />
+          <Route path="/cours" element={<CoursPage />} />
+          <Route path="/cours/:id" element={<CoursDetails />} />
+          <Route path="/admin/cours" element={<Cours />} />
+          <Route path="/ressource-documentation" element={<MarkdownEditor />} />
+          <Route path="/evaluation" element={<Evaluations />} />
+          <Route path="/evaluations/:id" element={<ViewEvaluation />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/admin/users" element={<SignupPage />} />
+        </Route>
+      </Route>
+    </Routes>
+  );
 }
 
 export default App;

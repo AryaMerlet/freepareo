@@ -19,7 +19,7 @@ export async function fetchCours() {
 export async function fetchMatiereByUserId(userId) {
   const { data, error } = await supabase
     .from("matiere")
-    .select("id, nom")
+    .select("id, nom, prof: id_prof (nom, prenom)")
     .eq("id_prof", userId);
 
   if (error) throw error;
@@ -30,7 +30,7 @@ export async function fetchMatiereByGroupId(groupId) {
   try {
     const { data, error } = await supabase
       .from("matiere")
-      .select("id, nom")
+      .select("id, nom, prof: id_prof (nom, prenom)")
       .eq("id_group", groupId);
     if (error) throw error;
     return { data, error: null };
@@ -181,16 +181,20 @@ export async function getCoursDetails(id) {
   try {
     const { data: ressourceData, error: ressourceError } = await supabase
       .from("ressource_matiere")
-      .select(`
+      .select(
+        `
         ...id_ressource(*,
         prof : id_prof(*)
-        )`)
+        )`
+      )
       .eq("id_matiere", id);
 
     const { data: evalData, error: evalError } = await supabase
       .from("evaluation")
-      .select(`
-        *`)
+      .select(
+        `
+        *`
+      )
       .eq("id_matiere", id);
 
     const { data: matiereData, error: matiereError } = await supabase

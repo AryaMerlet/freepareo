@@ -2,10 +2,22 @@ import React, { useEffect, useState } from "react";
 import { getCoursDetails } from "../services/coursService";
 import { useParams } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { ChevronDown, FileText, GraduationCap } from "lucide-react";
+import { ChevronDown, FileText, GraduationCap, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import MarkdownViewer from "./MarkdownViewer";
 import "@/markdown.css";
+import { useAuth } from "@/context/authContext";
+import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import MarkdownEditor from "./MarkdownEditor";
+import { ScrollArea } from "./ui/scroll-area";
 
 const AccordionItem = ({ title, children, defaultOpen = false }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen);
@@ -16,7 +28,9 @@ const AccordionItem = ({ title, children, defaultOpen = false }) => {
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between py-5 px-2 text-sm font-medium transition-all hover:bg-muted/30 rounded-md text-left group"
       >
-        <span className="text-base font-semibold group-hover:text-primary transition-colors">{title}</span>
+        <span className="text-base font-semibold group-hover:text-primary transition-colors">
+          {title}
+        </span>
         <ChevronDown
           className={cn(
             "h-4 w-4 shrink-0 text-muted-foreground transition-transform duration-200",
@@ -27,7 +41,9 @@ const AccordionItem = ({ title, children, defaultOpen = false }) => {
       <div
         className={cn(
           "grid transition-all duration-300 ease-in-out",
-          isOpen ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0"
+          isOpen
+            ? "grid-rows-[1fr] opacity-100 mb-4"
+            : "grid-rows-[0fr] opacity-0"
         )}
       >
         <div className="overflow-hidden">
@@ -44,6 +60,7 @@ export const CoursDetails = () => {
   const { id } = useParams();
   const [cours, setCours] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
 
   useEffect(() => {
     async function init() {
@@ -76,17 +93,12 @@ export const CoursDetails = () => {
     <div className="container mx-auto p-6 md:p-10 space-y-12 max-w-7xl animate-in fade-in duration-700">
       {/* Header */}
       <div className="flex flex-col gap-3 border-b pb-8">
-        <div className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground mb-2">
-          <span className="bg-primary/10 text-primary px-2 py-1 rounded-md">Cours</span>
-          <span>&gt;</span>
-          <span>Détails</span>
-        </div>
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-5xl text-foreground">
           {cours?.infos?.nom || "Détails du Cours"}
         </h1>
         <p className="text-lg text-muted-foreground max-w-3xl leading-relaxed">
-          Accédez aux supports de cours, exercices et évaluations pour ce module.
-          Cliquez sur une ressource pour en afficher le contenu.
+          Accédez aux supports de cours, exercices et évaluations pour ce
+          module. Cliquez sur une ressource pour en afficher le contenu.
         </p>
       </div>
 
@@ -98,9 +110,36 @@ export const CoursDetails = () => {
               <FileText className="w-6 h-6 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">Ressources Pédagogiques</h2>
-              <p className="text-sm text-muted-foreground">Supports, documents et lectures</p>
+              <h2 className="text-2xl font-bold tracking-tight">
+                Ressources Pédagogiques
+              </h2>
+              <p className="text-sm text-muted-foreground">
+                Supports, documents et lectures
+              </p>
             </div>
+
+            {user?.profile?.role === "prof" && (
+              <>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button>
+                      <Plus className="w-4 h-4" />
+                      Ajouter une ressource
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent>
+                    <DialogHeader>
+                      <DialogTitle>Ajouter une ressource</DialogTitle>
+                      <DialogDescription>
+                        <ScrollArea className="h-[500px]">
+                          <MarkdownEditor id_matiere={id} />
+                        </ScrollArea>
+                      </DialogDescription>
+                    </DialogHeader>
+                  </DialogContent>
+                </Dialog>
+              </>
+            )}
           </div>
 
           <Card className="border shadow-md bg-card/60 backdrop-blur-xl overflow-hidden">
@@ -110,7 +149,12 @@ export const CoursDetails = () => {
                   {cours.ressources.map((ressource) => (
                     <AccordionItem key={ressource.id} title={ressource.nom}>
                       <div className="markdown max-w-none">
-                        <MarkdownViewer markdown={ressource.content || "Aucun contenu disponible."} />
+                        <MarkdownViewer
+                          resourceId={ressource.id}
+                          markdown={
+                            ressource.content || "Aucun contenu disponible."
+                          }
+                        />
                       </div>
                     </AccordionItem>
                   ))}
@@ -121,7 +165,9 @@ export const CoursDetails = () => {
                     <FileText className="h-8 w-8 opacity-40" />
                   </div>
                   <p className="font-medium">Aucune ressource disponible</p>
-                  <p className="text-sm opacity-70">Les documents apparaîtront ici.</p>
+                  <p className="text-sm opacity-70">
+                    Les documents apparaîtront ici.
+                  </p>
                 </div>
               )}
             </CardContent>
@@ -136,14 +182,19 @@ export const CoursDetails = () => {
             </div>
             <div>
               <h2 className="text-2xl font-bold tracking-tight">Évaluations</h2>
-              <p className="text-sm text-muted-foreground">Examens et devoirs à rendre</p>
+              <p className="text-sm text-muted-foreground">
+                Examens et devoirs à rendre
+              </p>
             </div>
           </div>
 
           <div className="grid gap-5">
             {cours?.evaluations?.length > 0 ? (
               cours.evaluations.map((evaluation) => (
-                <Card key={evaluation.id} className="group relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 border-l-orange-500/70">
+                <Card
+                  key={evaluation.id}
+                  className="group relative overflow-hidden transition-all hover:shadow-lg hover:-translate-y-1 border-l-4 border-l-orange-500/70"
+                >
                   <div className="absolute top-0 right-0 p-3 opacity-10 group-hover:opacity-20 transition-opacity">
                     <GraduationCap className="w-20 h-20 rotate-12" />
                   </div>
@@ -159,8 +210,11 @@ export const CoursDetails = () => {
                       </span>
                     </div>
                     <p className="text-sm text-muted-foreground line-clamp-3">
-                      {evaluation.contenu && typeof evaluation.contenu !== 'object' ? evaluation.contenu :
-                        (evaluation.contenu?.description || "Consultez les détails pour plus d'informations.")}
+                      {evaluation.contenu &&
+                      typeof evaluation.contenu !== "object"
+                        ? evaluation.contenu
+                        : evaluation.contenu?.description ||
+                          "Consultez les détails pour plus d'informations."}
                     </p>
                   </CardContent>
                 </Card>
@@ -172,7 +226,9 @@ export const CoursDetails = () => {
                     <GraduationCap className="h-8 w-8 opacity-40" />
                   </div>
                   <p className="font-medium">Aucune évaluation prévue</p>
-                  <p className="text-sm opacity-70">Tout est calme pour le moment.</p>
+                  <p className="text-sm opacity-70">
+                    Tout est calme pour le moment.
+                  </p>
                 </CardContent>
               </Card>
             )}
