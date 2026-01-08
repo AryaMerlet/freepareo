@@ -60,9 +60,16 @@
   font-family: monospace;
 }
 
-.markdown pre {
+/*.markdown pre {
   background: #111827;
   color: #f9fafb;
+  padding: 1rem;
+  border-radius: 8px;
+  overflow-x: auto;
+}*/
+
+.markdown pre {
+  background: #111827;
   padding: 1rem;
   border-radius: 8px;
   overflow-x: auto;

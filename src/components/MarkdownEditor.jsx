@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import rehypeHighlight from "rehype-highlight";
+import "highlight.js/styles/github-dark.css";
 import supabase from "@/utils/supabase";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -154,7 +156,12 @@ export default function MarkdownEditor() {
             />
           ) : (
             <div className="markdown max-w-none rounded-md border bg-muted p-4">
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{value}</ReactMarkdown>
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeHighlight]}
+              >
+                {value}
+              </ReactMarkdown>
             </div>
           )}
 
@@ -224,7 +231,10 @@ export default function MarkdownEditor() {
                     className="min-h-40 font-mono"
                   />
                 ) : (
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  <ReactMarkdown
+                    remarkPlugins={[remarkGfm]}
+                    rehypePlugins={[rehypeHighlight]}
+                  >
                     {r.content}
                   </ReactMarkdown>
                 )}
