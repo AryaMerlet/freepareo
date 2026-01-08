@@ -17,34 +17,34 @@ import {
 } from "@/components/ui/select";
 
 import { parse as csvParse } from "csv-parse/browser/esm/sync";
-import MarkdownViewer from "../../components/MarkdownViewer";
-import CsvViewer from "../../components/CsvViewer";
+import MarkdownViewer from "../../components/evaluations/MarkdownViewer";
+import CsvViewer from "../../components/evaluations/CsvViewer";
 import supabase from "../../utils/supabase";
 
 export default function AddDialog({ open, onClose, onCreated }) {
   const [nom, setNom] = useState("");
-  const [coursId, setCoursId] = useState("");
-  const [coursList, setCoursList] = useState([]);
+  const [matiereId, setMatiereId] = useState("");
+  const [matiereList, setMatiereList] = useState([]);
   const [maximum, setMaximum] = useState("");
   const [fileType, setFileType] = useState(null);
   const [preview, setPreview] = useState("");
   const [contenu, setContenu] = useState(null);
 
-  // recup les cours
+  // recup les matiere
   useEffect(() => {
-    const loadCours = async () => {
+    const loadMatiere = async () => {
       const { data } = await supabase
-        .from("cours")
+        .from("matiere")
         .select("id, nom")
         .order("nom", { ascending: true });
-      setCoursList(data ?? []);
+      setMatiereList(data ?? []);
     };
-    loadCours();
+    loadMatiere();
   }, []);
 
   const reset = () => {
     setNom("");
-    setCoursId("");
+    setMatiereId("");
     setMaximum("");
     setFileType(null);
     setPreview("");
@@ -75,31 +75,49 @@ export default function AddDialog({ open, onClose, onCreated }) {
 
     if (ext === "csv") {
       setFileType("csv");
-      // Parse CSV and preserve column order
       const parsed = csvParse(text, { columns: true, skip_empty_lines: true });
+
       if (Array.isArray(parsed) && parsed.length > 0) {
-        // Extract headers in original order from first row
         const headers = Object.keys(parsed[0]);
-        // Store with headers to preserve order
-        setContenu({
-          headers: headers,
-          rows: parsed,
+
+        // Convertir toutes les colonnes "points" en int
+        const rows = parsed.map((row) => {
+          const newRow = { ...row };
+          Object.keys(newRow).forEach((key) => {
+            if (key.toLowerCase().includes("points")) {
+              newRow[key] = parseInt(newRow[key], 10) || 0;
+            }
+          });
+          return newRow;
         });
+
+        // Calcul du score max
+        const maxPoints = rows.reduce((sum, row) => {
+          const pointsCols = Object.keys(row).filter((k) =>
+            k.toLowerCase().includes("points")
+          );
+          const rowSum = pointsCols.reduce((s, col) => s + row[col], 0);
+          return sum + rowSum;
+        }, 0);
+
+        setMaximum(maxPoints);
+        setContenu({ headers, rows });
       } else {
         setContenu({ headers: [], rows: [] });
+        setMaximum(0);
       }
     }
   };
   // obligation de remplissage
   const handleSubmit = async () => {
-    if (!nom || !maximum || !contenu || !coursId) {
+    if (!nom || !maximum || !contenu || !matiereId) {
       alert("Tous les champs sont obligatoires");
       return;
     }
     //partie creation
     const { error } = await supabase.from("evaluation").insert({
       nom,
-      id_cours: coursId,
+      id_matiere: matiereId,
       maximum: Number(maximum),
       contenu,
     });
@@ -129,15 +147,15 @@ export default function AddDialog({ open, onClose, onCreated }) {
             onChange={(e) => setNom(e.target.value)}
           />
 
-          {/* select pour choisir le cours */}
-          <Select value={coursId} onValueChange={setCoursId}>
+          {/* select pour choisir la matière */}
+          <Select value={matiereId} onValueChange={setMatiereId}>
             <SelectTrigger>
-              <SelectValue placeholder="Choisir un cours" />
+              <SelectValue placeholder="Choisir une matière" />
             </SelectTrigger>
             <SelectContent>
-              {coursList.map((c) => (
-                <SelectItem key={c.id} value={c.id}>
-                  {c.nom}
+              {matiereList.map((m) => (
+                <SelectItem key={m.id} value={m.id}>
+                  {m.nom}
                 </SelectItem>
               ))}
             </SelectContent>
