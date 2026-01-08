@@ -122,20 +122,11 @@
   }
 }
 
-
-
-
-
-
-
 body {
   margin: 0;
   font-family: Inter, sans-serif;
   background: #f6f7f9;
 }
-
-
-
 
 .admin-sidebar {
   width: 240px;
@@ -146,15 +137,11 @@ body {
   padding: 20px;
 }
 
-
-
 .admin-sidebar h2 {
   font-size: 22px;
   font-weight: 700;
   margin-bottom: 30px;
 }
-
-
 
 .admin-sidebar button {
   width: 100%;
@@ -170,13 +157,9 @@ body {
   border-radius: 6px;
 }
 
-
-
 .admin-sidebar button:hover {
   background: #f1f1f1;
 }
-
-
 
 .admin-sidebar button.active {
   background: #e5edff;
@@ -184,14 +167,10 @@ body {
   font-weight: 600;
 }
 
-
-
 .admin-main {
   margin-left: 280px;
   width: calc(100% - 240px);
 }
-
-
 
 .admin-header {
   background: white;
@@ -201,21 +180,15 @@ body {
   border-bottom: 1px solid #e0e0e0;
 }
 
-
-
 .admin-container {
   padding: 24px;
 }
-
-
 
 .admin-topbar {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
 }
-
-
 
 .admin-topbar input {
   width: 30%;
@@ -225,8 +198,6 @@ body {
   font-size: 14px;
   background: white;
 }
-
-
 
 .admin-topbar button {
   display: flex;
@@ -241,25 +212,18 @@ body {
   font-size: 14px;
 }
 
-
-
 .admin-topbar button:disabled {
   background: #93c5fd;
   cursor: not-allowed;
 }
-
-
-
 
 .admin-card {
   background: white;
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #e0e0e0;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
-
-
 
 .admin-table {
   width: 100%;
@@ -267,14 +231,10 @@ body {
   font-size: 14px;
 }
 
-
-
 .admin-table thead {
   background: #f1f3f5;
   border-bottom: 1px solid #e0e0e0;
 }
-
-
 
 .admin-table th {
   padding: 14px;
@@ -283,15 +243,11 @@ body {
   color: #444;
 }
 
-
-
 .admin-table td {
   padding: 14px;
   border-bottom: 1px solid #eaeaea;
   color: #666;
 }
-
-
 
 .admin-actions {
   display: flex;
@@ -299,57 +255,42 @@ body {
   gap: 12px;
 }
 
-
-
 .admin-actions button {
   border: none;
   background: none;
   cursor: pointer;
 }
 
-
-
 .admin-actions button.edit {
   color: #f59e0b;
 }
-
-
 
 .admin-actions button.delete {
   color: #ef4444;
 }
 
-
-
-
 .admin-modal-bg {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.4);
+  background: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-
 
 .admin-modal {
   background: white;
   width: 380px;
   padding: 22px;
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
 }
-
-
 
 .admin-modal h3 {
   margin: 0 0 16px 0;
   font-size: 18px;
   font-weight: 600;
 }
-
-
 
 .admin-modal input {
   width: 100%;
@@ -360,16 +301,12 @@ body {
   font-size: 14px;
 }
 
-
-
 .admin-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
   margin-top: 10px;
 }
-
-
 
 .admin-modal-footer button {
   padding: 8px 12px;
@@ -378,19 +315,13 @@ body {
   cursor: pointer;
 }
 
-
-
 .admin-modal-footer button.save {
   background: #2563eb;
   color: white;
   border: none;
 }
 
-
-
 .admin-modal-footer button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
-
- 
