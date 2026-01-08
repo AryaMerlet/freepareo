@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import "@/markdown.css";
+import { CommentaireWrapper } from "./commentaire-wrapper";
 
 export default function MarkdownEditor() {
   const [title, setTitle] = useState("");
@@ -231,12 +232,14 @@ export default function MarkdownEditor() {
                     className="min-h-40 font-mono"
                   />
                 ) : (
-                  <ReactMarkdown
-                    remarkPlugins={[remarkGfm]}
-                    rehypePlugins={[rehypeHighlight]}
-                  >
-                    {r.content}
-                  </ReactMarkdown>
+                  <CommentaireWrapper resourceId={r.id}>
+                    <ReactMarkdown
+                      remarkPlugins={[remarkGfm]}
+                      rehypePlugins={[rehypeHighlight]}
+                    >
+                      {r.content}
+                    </ReactMarkdown>
+                  </CommentaireWrapper>
                 )}
               </CardContent>
             </Card>
