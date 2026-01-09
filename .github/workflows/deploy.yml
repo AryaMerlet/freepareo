@@ -15,7 +15,7 @@ jobs:
         with:
           host: 212.227.52.231
           username: neil
-          key: ${{ secrets.DEPLOY_KEY }}
+          key: ${{ secrets.DEPLOY_KEY-freepareo_deploy }}
           script: |
             cd /srv/freepareo
             git pull origin dev
