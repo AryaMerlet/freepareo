@@ -1,0 +1,23 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 212.227.52.231
+          username: neil
+          key: ${{ secrets.freepareo_deploy_key }}
+          script: |
+            cd /srv/freepareo
+            git pull origin dev
+            npm install
+            npm run build
