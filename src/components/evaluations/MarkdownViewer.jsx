@@ -1,7 +1,7 @@
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
-import { CommentaireWrapper } from "./commentaire-wrapper";
+import { CommentaireWrapper } from "../commentaire-wrapper";
 
 export default function MarkdownViewer({ markdown, resourceId }) {
   return (
