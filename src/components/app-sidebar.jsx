@@ -12,15 +12,13 @@ import {
   IconInnerShadowTop,
   IconListDetails,
   IconReport,
+  IconSearch,
+  IconSettings,
   IconUsers,
   IconMessage,
   IconBook,
 } from "@tabler/icons-react";
 
-import { NavDocuments } from "@/components/nav-documents";
-import { NavMain } from "@/components/nav-main";
-import { NavSecondary } from "@/components/nav-secondary";
-import { NavUser } from "@/components/nav-user";
 import {
   Sidebar,
   SidebarContent,
@@ -31,7 +29,12 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useAuth } from "@/context/authContext";
+import { isAdmin } from "@/utils/role";
 import { NavMessages } from "./nav-messages";
+import { NavDocuments } from "./nav-documents";
+import { NavMain } from "./nav-main";
+import { NavSecondary } from "./nav-secondary";
+import { NavUser } from "./nav-user";
 import { Navigate } from "react-router-dom";
 
 const data = {
@@ -74,6 +77,17 @@ export function AppSidebar({ ...props }) {
     return <Navigate to="/login" />;
   }
 
+  // Build admin items; include dashboard link for admin users
+  const adminItems = [...data.Admin];
+  if (isAdmin(user)) {
+    // Show dashboard to admins
+    adminItems.unshift({
+      name: "Tableau de bord",
+      url: "/admin/dashboard",
+      icon: IconDashboard,
+    });
+  }
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -89,7 +103,7 @@ export function AppSidebar({ ...props }) {
       <SidebarContent>
         <NavMain items={data.navMain} />
         <NavMessages items={data.navMessage} />
-        <NavDocuments items={data.Admin} />
+        <NavDocuments items={adminItems} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

@@ -3,10 +3,8 @@ import supabase from "../utils/supabase";
 export async function fetchCours() {
   try {
     const { data, error } = await supabase
-      .from("cours")
-      .select(
-        `id,nom,jour,prof: id_prof (nom, prenom),group: id_group (nom),id_prof,id_group`
-      );
+      .from("matiere")
+      .select("*, cours: cours(id, jour)");
 
     if (error) throw error;
     return { data, error: null };
@@ -81,33 +79,21 @@ export async function fetchGroups() {
 // Matiere functions
 export async function fetchMatieres() {
   try {
+    // Select all matiere columns and all related cours columns in one query
     const { data, error } = await supabase
       .from("matiere")
-      .select(
-        `id, nom, id_group, id_prof, group: id_group (nom), prof: id_prof (nom, prenom)`
-      )
+      .select(`*, cours: cours(*)`)
       .order("created_at", { ascending: false });
 
     if (error) throw error;
 
-    // Fetch cours for each matiere separately
-    if (data) {
-      const matieresWithCours = await Promise.all(
-        data.map(async (matiere) => {
-          const { data: coursData } = await supabase
-            .from("cours")
-            .select("id, jour")
-            .eq("id_matiere", matiere.id);
-          return {
-            ...matiere,
-            cours: coursData || [],
-          };
-        })
-      );
-      return { data: matieresWithCours, error: null };
-    }
+    // Ensure cours is always present
+    const matieresWithCours = (data || []).map((m) => ({
+      ...m,
+      cours: m.cours || [],
+    }));
 
-    return { data, error: null };
+    return { data: matieresWithCours, error: null };
   } catch (error) {
     console.error("Erreur chargement matieres:", error);
     return { data: null, error };
