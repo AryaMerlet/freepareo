@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: freepareo_deploy
 
     steps:
       - name: Deploy via SSH
@@ -15,7 +16,7 @@ jobs:
         with:
           host: 212.227.52.231
           username: neil
-          key: ${{ secrets.DEPLOY_KEY-freepareo_deploy }}
+          key: ${{ secrets.DEPLOY_KEY }}
           script: |
             cd /srv/freepareo
             git pull origin dev
