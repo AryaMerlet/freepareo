@@ -96,59 +96,82 @@ export default function ViewEvaluation() {
     <div className="p-6 max-w-3xl space-y-6">
       {/* btn vers la liste */}
       <Button variant="outline" onClick={() => navigate(-1)}>
-        Retour
+        ← Retour
       </Button>
 
       {/* infos d eval */}
-      <h1 className="text-2xl font-bold">{evaluation.nom}</h1>
+      <h1 className="text-3xl font-bold">{evaluation.nom}</h1>
       {matiere && (
         <p className="text-sm text-muted-foreground">Matière : {matiere.nom}</p>
       )}
-      <p className="text-sm">Score maximum : {evaluation.maximum}</p>
+      <p className="text-sm text-muted-foreground">
+        Score maximum : {evaluation.maximum}
+      </p>
 
-      {/* contenu  */}
-      {fileType === "md" && <MarkdownViewer markdown={evaluation.contenu} />}
+      {/* Markdown */}
+      {fileType === "md" && (
+        <div className="prose max-w-full">
+          <MarkdownViewer markdown={evaluation.contenu} />
+        </div>
+      )}
 
-      {/* CSV/QCM */}
+      {/* CSV / QCM */}
       {fileType === "csv" && questions.length > 0 && (
         <div className="space-y-6">
           {questions.map((q, i) => (
-            <div key={i} className="border rounded p-3 space-y-2">
-              <p className="font-semibold">{q.question}</p>
+            <div
+              key={i}
+              className="border rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow duration-150"
+            >
+              <p className="font-semibold text-lg">{q.question}</p>
 
-              {/* Si c'est professeur/admin, on affiche tout */}
+              {/* Prof/Admin */}
               {isTeacher ? (
-                <div className="space-y-1">
-                  <p>Option 1: {q.option1}</p>
-                  <p>Option 2: {q.option2}</p>
-                  <p>Option 3: {q.option3}</p>
-                  <p className="text-green-600">Correct: {q.correct}</p>
-                  <p>Points: {q.points}</p>
+                <div className="space-y-1 mt-2">
+                  <p className="text-sm">Option 1: {q.option1}</p>
+                  <p className="text-sm">Option 2: {q.option2}</p>
+                  <p className="text-sm">Option 3: {q.option3}</p>
+                  <p className="text-sm text-green-600 font-medium">
+                    Correct: {q.correct}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Points: {q.points}
+                  </p>
                 </div>
               ) : (
-                // sinon, mode élève QCM
-                ["option1", "option2", "option3"].map((optKey) => (
-                  <label key={optKey} className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name={`q-${i}`}
-                      value={q[optKey]}
-                      checked={answers[i] === q[optKey]}
-                      onChange={() => handleAnswerChange(i, q[optKey])}
-                    />
-                    {q[optKey]}
-                  </label>
-                ))
+                // Élève QCM
+                <div className="flex flex-col gap-2 mt-2">
+                  {["option1", "option2", "option3"].map((optKey) => (
+                    <label
+                      key={optKey}
+                      className="flex items-center gap-2 p-2 border rounded-md hover:bg-muted/20 cursor-pointer transition"
+                    >
+                      <input
+                        type="radio"
+                        name={`q-${i}`}
+                        value={q[optKey]}
+                        checked={answers[i] === q[optKey]}
+                        onChange={() => handleAnswerChange(i, q[optKey])}
+                        className="accent-primary"
+                      />
+                      <span className="text-sm">{q[optKey]}</span>
+                    </label>
+                  ))}
+                </div>
               )}
             </div>
           ))}
 
+          {/* btn soumission */}
           {!isTeacher && questions.length > 0 && !submitted && (
-            <Button onClick={handleSubmit}>Soumettre</Button>
+            <Button variant="default" className="mt-2" onClick={handleSubmit}>
+              Soumettre
+            </Button>
           )}
 
+          {/* Score élève */}
           {!isTeacher && submitted && (
-            <p className="text-lg font-bold">
+            <p className="text-lg font-bold text-green-700 mt-2">
               Votre score : {score} / {evaluation.maximum}
             </p>
           )}

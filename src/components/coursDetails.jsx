@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { ChevronDown, FileText, GraduationCap, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
-import MarkdownViewer from "./MarkdownViewer";
+import MarkdownViewer from "./evaluations/MarkdownViewer";
 import "@/markdown.css";
 import { useAuth } from "@/context/authContext";
 import { Button } from "./ui/button";

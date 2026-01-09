@@ -38,15 +38,9 @@ function App() {
           <Route path="/ressource-documentation" element={<MarkdownEditor />} />
           <Route path="/evaluation" element={<Evaluations />} />
           <Route path="/evaluations/:id" element={<ViewEvaluation />} />
-<<<<<<< Updated upstream
           <Route path="/profile" element={<Profile />} />
           <Route path="/admin/users" element={<SignupPage />} />
         </Route>
-=======
-        </Route>
-        <Route path="/" element={<SignupPage />} />
-        {/* Page visualisation d'une éval (paramètre id) */}
->>>>>>> Stashed changes
       </Route>
     </Routes>
   );
