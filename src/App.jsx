@@ -28,7 +28,6 @@ function App() {
 			{/* === Pages protégées === */}
 			<Route element={<ProtectedRoute />}>
 				<Route path="/logout" element={<Logout />} />
-
 				<Route element={<MainLayout />}>
 					<Route element={<AdminRoute />}>
 						<Route path="/admin/users" element={<SignupPage />} />
