@@ -49,11 +49,6 @@ const data = {
       url: "/evaluation",
       icon: IconDashboard,
     },
-    {
-      title: "Ressource documentation",
-      url: "/ressource-documentation",
-      icon: IconListDetails,
-    },
   ],
   navMessage: [
     {
@@ -67,6 +62,11 @@ const data = {
       name: "Gestion des cours",
       url: "/admin/cours",
       icon: IconReport,
+    },
+    {
+      name: "Gestion des utilisateurs",
+      url: "/admin/users",
+      icon: IconUsers,
     },
   ],
 };
