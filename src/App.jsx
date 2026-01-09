@@ -22,6 +22,7 @@ function App() {
 		<Routes>
 			{/* === Pages publiques === */}
 			<Route path="/login" element={<LoginPage />} />
+
 			<Route path="/set-password" element={<SetPasswordPage />} />
 
 			{/* === Pages protégées === */}
