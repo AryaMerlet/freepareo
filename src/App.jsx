@@ -32,22 +32,20 @@ function App() {
 
         <Route element={<MainLayout />}>
           <Route element={<AdminRoute />}>
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/admin/users" element={<SignupPage />} />
+            <Route path="/admin/cours" element={<Cours />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
           </Route>
           <Route path="/" element={<Home />} />
           <Route path="/users" element={<Users />} />
           <Route path="/cours" element={<CoursPage />} />
           <Route path="/cours/:id" element={<CoursDetails />} />
-          <Route path="/admin/cours" element={<Cours />} />
-          <Route path="/admin/dashboard" element={<AdminDashboard />} />
           <Route path="/ressource-documentation" element={<MarkdownEditor />} />
           <Route path="/evaluation" element={<Evaluations />} />
+          {/* Page visualisation d'une éval (paramètre id) */}
           <Route path="/evaluations/:id" element={<ViewEvaluation />} />
-          <Route path="/admin/users" element={<SignupPage />} />
           <Route path="/profile" element={<Profile />} />
         </Route>
-        <Route path="/signup" element={<SignupPage />} />
-        {/* Page visualisation d'une éval (paramètre id) */}
       </Route>
     </Routes>
   );
