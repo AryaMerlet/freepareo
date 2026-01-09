@@ -1,0 +1,203 @@
+/* AdminScheduler.css */
+.rsc__timeline__header,
+.rsc__timeline__hours {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rsc__event__title {
+  white-space: normal;
+  word-wrap: break-word;
+}
+/* Désactiver les hover sur mobile */
+@media (hover: none) and (pointer: coarse) {
+  .rs__toolbar button:hover,
+  .rs__toolbar button:focus,
+  .rs__toolbar button:active {
+    background-color: transparent !important;
+    box-shadow: none !important;
+  }
+}
+@media (max-width: 768px) {
+  .rs__toolbar button {
+    pointer-events: none;
+  }
+}
+
+/* Mobile First - Vue par jour (par défaut) */
+.scheduler-container {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+.scheduler-loading,
+.scheduler-error {
+  padding: 20px;
+  text-align: center;
+  font-size: 14px;
+}
+
+.rbc-scheduler {
+  width: 100%;
+  font-size: 14px;
+}
+
+.rbc-scheduler .rbc-header {
+  padding: 8px 4px;
+  font-size: 12px;
+}
+
+.rbc-scheduler .rbc-time-slot {
+  height: 40px;
+}
+
+.rbc-scheduler .rbc-event {
+  padding: 4px;
+  font-size: 11px;
+}
+
+/* Mobile < 480px */
+@media (max-width: 480px) {
+  .scheduler-container {
+    padding: 4px;
+  }
+
+  .rbc-scheduler {
+    font-size: 12px;
+  }
+
+  .rbc-toolbar {
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .rbc-toolbar button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .rbc-header {
+    padding: 8px 4px;
+    font-size: 12px;
+  }
+
+  .rbc-time-slot {
+    height: 40px;
+  }
+
+  .rbc-event {
+    padding: 4px;
+    font-size: 11px;
+    line-height: 1.2;
+  }
+
+  .rbc-time-content {
+    font-size: 11px;
+  }
+
+  .rbc-time-slot-group {
+    min-height: 40px;
+  }
+}
+
+/* Tablette 481px - 767px */
+@media (min-width: 481px) and (max-width: 767px) {
+  .scheduler-container {
+    padding: 10px;
+  }
+
+  .rbc-scheduler {
+    font-size: 13px;
+  }
+
+  .rbc-toolbar {
+    margin-bottom: 15px;
+  }
+
+  .rbc-toolbar button {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  .rbc-header {
+    padding: 10px 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+
+  .rbc-time-slot {
+    height: 50px;
+  }
+
+  .rbc-event {
+    padding: 6px;
+    font-size: 12px;
+  }
+
+  .rbc-time-content {
+    font-size: 12px;
+  }
+}
+
+/* Desktop >= 768px */
+@media (min-width: 768px) {
+  .scheduler-container {
+    padding: 16px;
+  }
+
+  .rbc-scheduler {
+    font-size: 14px;
+  }
+
+  .rbc-toolbar {
+    margin-bottom: 20px;
+  }
+
+  .rbc-toolbar button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+
+  .rbc-header {
+    padding: 12px 8px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .rbc-time-slot {
+    height: 60px;
+  }
+
+  .rbc-event {
+    padding: 8px;
+    font-size: 13px;
+  }
+
+  .rbc-time-content {
+    font-size: 13px;
+  }
+}
+
+/* Large Desktop >= 1024px */
+@media (min-width: 1024px) {
+  .scheduler-container {
+    padding: 20px;
+  }
+
+  .rbc-header {
+    padding: 14px 10px;
+    font-size: 15px;
+  }
+
+  .rbc-time-slot {
+    height: 80px;
+  }
+
+  .rbc-event {
+    padding: 10px;
+    font-size: 14px;
+  }
+}
